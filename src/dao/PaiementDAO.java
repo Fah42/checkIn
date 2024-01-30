@@ -59,15 +59,76 @@ public class PaiementDAO {
                 paiement.setId(resultat.getInt("id"));
                 paiement.setDateP(resultat.getDate("dateP"));
                 paiement.setMontant(resultat.getDouble("montant"));
-                paiement.set (resultat.getString("ville"));
-                paiement.setDesc(resultat.getString("description"));
-                paiement.setParking(resultat.getString("parking"));
+                paiement.setMethode(resultat.getString("methode"));
+                paiement.setId_reservation(resultat.getInt("id_reservation"));
                 paiements.add(paiement);
             }
             return paiements;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+    public void deleteById(int id) {
+        try {
+            PreparedStatement ps = Database.connexion.prepareStatement("DELETE FROM paiement WHERE id = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            System.out.println("Paiement Deleted");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Paiement> searchPaiements(String searchTerm) {
+        ArrayList<Paiement> paiements = new ArrayList<>();
+        try {
+            PreparedStatement ps = Database.connexion.prepareStatement("SELECT * FROM paiement WHERE dateP LIKE ? OR montant LIKE ? OR methode LIKE ?");
+            ps.setString(1, "%" + searchTerm + "%");
+            ps.setString(2, "%" + searchTerm + "%");
+            ps.setString(3, "%" + searchTerm + "%");
+            ResultSet resultat = ps.executeQuery();
+            while (resultat.next()) {
+                Paiement paiement = new Paiement();
+                paiement.setId(resultat.getInt("id"));
+                paiement.setDateP(resultat.getDate("dateP"));
+                paiement.setMontant(resultat.getDouble("montant"));
+                paiement.setMethode(resultat.getString("methode"));
+                paiement.setId_reservation(resultat.getInt("id_reservation"));
+                paiements.add(paiement);
+            }
+            return paiements;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Paiement getByIdReservation(int id) {
+        try {
+            PreparedStatement ps = Database.connexion.prepareStatement("SELECT * FROM paiement WHERE id_reservation = ?");
+            ps.setInt(1, id);
+            ResultSet resultat = ps.executeQuery();
+            resultat.next();
+            Paiement paiement = new Paiement();
+            paiement.setId(resultat.getInt("id"));
+            paiement.setDateP(resultat.getDate("dateP"));
+            paiement.setMontant(resultat.getDouble("montant"));
+            paiement.setMethode(resultat.getString("methode"));
+            paiement.setId_reservation(resultat.getInt("id_reservation"));
+            return paiement;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public void deleteByIdReservation(int id) {
+        try {
+            PreparedStatement ps = Database.connexion.prepareStatement("DELETE FROM paiement WHERE id_reservation = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            System.out.println("Paiement Deleted");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

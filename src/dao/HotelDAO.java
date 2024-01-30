@@ -191,7 +191,7 @@ public class HotelDAO {
             ps.executeUpdate();
             System.out.println("Hotel Deleted");
         } catch (Exception e) {
-            return;
+            e.printStackTrace();
         }
     }
 }

@@ -102,7 +102,7 @@ public class ClientDAO {
             ps.executeUpdate();
             System.out.println("User Deleted");
         } catch (Exception e) {
-            return;
+            e.printStackTrace();
         }
     }
 
@@ -136,6 +136,7 @@ public class ClientDAO {
             }
             return clients;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
