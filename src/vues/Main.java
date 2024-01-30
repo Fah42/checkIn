@@ -18,15 +18,15 @@ public class Main {
         while (userChoice != 0) {
             userChoice = menu();
             if (userChoice == 1) {
-                displayProduct();
+                displayCompany();
             } else if (userChoice == 2) {
-                addProduct();
+                addCompany();
             } else if (userChoice == 3) {
-                modifyProduct();
+                modifyCompany();
             } else if (userChoice == 4) {
-                deleteProduct();
+                deleteCompany();
             } else if (userChoice == 5) {
-                searchProduct();
+                searchCompany();
             } else if (userChoice == 6) {
                 displayClient();
             } else if (userChoice == 7) {
@@ -93,22 +93,27 @@ public class Main {
     }
 
     public static void displayCompany() {
+        ArrayList<Societe> societes = new ArrayList<>();
+        societes = new SocieteDAO().getAll();
+
+        for(Societe societe:societes) {
+            System.out.println(societe);
+        }
+    }
+
+    public static void addCompany() {
         
     }
 
-    public static void addProduct() {
+    public static void modifyCompany() {
         
     }
 
-    public static void modifyProduct() {
+    public static void deleteCompany() {
         
     }
 
-    public static void deleteProduct() {
-        
-    }
-
-    public static void searchProduct() {
+    public static void searchCompany() {
         
     }
 
