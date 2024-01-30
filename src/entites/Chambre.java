@@ -6,16 +6,18 @@ public class Chambre {
     int numberOfSimple;
     int numberOfDouble;
     int chamberArea;
+    int id_hotel;
     String bathroom;
     String tv;
     String balcony;
     String fridge;
     String bathtub;
     String soundproof;
-    String pricePerNight;
+    double pricePerNight;
 
-    public Chambre(int id, int chamberNumber, int numberOfSimple, int numberOfDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, String pricePerNight) {
+    public Chambre(int id, int id_hotel, int chamberNumber, int numberOfSimple, int numberOfDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
         this.id = id;
+        this.id_hotel = id_hotel;
         this.chamberNumber = chamberNumber;
         this.numberOfSimple = numberOfSimple;
         this.numberOfDouble = numberOfDouble;
@@ -28,7 +30,7 @@ public class Chambre {
         this.soundproof = soundproof;
         this.pricePerNight = pricePerNight;
     }
-    public Chambre(int chamberNumber, int numberOfSimple, int numberOfDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, String pricePerNight) {
+    public Chambre(int chamberNumber, int numberOfSimple, int numberOfDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
         this.chamberNumber = chamberNumber;
         this.numberOfSimple = numberOfSimple;
         this.numberOfDouble = numberOfDouble;
@@ -43,6 +45,14 @@ public class Chambre {
     }
     public Chambre() {
 
+    }
+
+    public int getId_hotel() {
+        return id_hotel;
+    }
+
+    public void setId_hotel(int id_hotel) {
+        this.id_hotel = id_hotel;
     }
 
     public int getId() {
@@ -133,11 +143,11 @@ public class Chambre {
         this.soundproof = soundproof;
     }
 
-    public String getPricePerNight() {
+    public double getPricePerNight() {
         return pricePerNight;
     }
 
-    public void setPricePerNight(String pricePerNight) {
+    public void setPricePerNight(double pricePerNight) {
         this.pricePerNight = pricePerNight;
     }
 
