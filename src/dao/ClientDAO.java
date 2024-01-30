@@ -41,7 +41,6 @@ public class ClientDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return;
         }
     }
 

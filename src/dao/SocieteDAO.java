@@ -1,5 +1,6 @@
 package dao;
 
+import entites.Client;
 import entites.Societe;
 import entites.Database;
 
@@ -50,12 +51,30 @@ public class SocieteDAO {
             return null;
         }
     }
+    public Societe getById(int id) {
+        try {
+            PreparedStatement ps = Database.connexion.prepareStatement("SELECT * FROM societe WHERE id = ?");
+            ps.setInt(1, id);
+            ResultSet resultat = ps.executeQuery();
+            resultat.next();
+
+            Societe u = new Societe();
+            u.setId(resultat.getInt("id"));
+            u.setName(resultat.getString("nom"));
+            u.setSiret(resultat.getInt("siret"));
+            u.setAdress(resultat.getString("adresse"));
+            return u;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public void deleteById(int id) {
         try {
             PreparedStatement ps = Database.connexion.prepareStatement("DELETE FROM societe WHERE id = ?");
             ps.setInt(1, id);
             ps.executeUpdate();
-            System.out.println("User Deleted");
+            System.out.println("Societe Deleted");
         } catch (Exception e) {
             return;
         }
