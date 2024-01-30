@@ -92,7 +92,7 @@ public class Main {
         return 0.0;
     }
 
-    public static void displayProduct() {
+    public static void displayCompany() {
         
     }
 
@@ -215,17 +215,11 @@ public class Main {
             }
             isInputValid = false;
 
-            while(!isInputValid){
+            do {
                 System.out.println("Veuillez entrer le sexe du client (homme / femme): ");
                 sexe = scanner.nextLine();
-    
-                if (client.setSexe(sexe)){
-                    isInputValid = true;
-                } else {
-                    System.out.println("L'email entré n'est pas valide. Veuillez réessayer.");
-                }
-            }
-            isInputValid = false;
+                client.setSexe(sexe);
+            } while (!"homme".equalsIgnoreCase(sexe) && !"femme".equalsIgnoreCase(sexe));
 
             while(!isInputValid){
                 System.out.println("Veuillez entrer le numero de telephone du client : ");
@@ -413,7 +407,7 @@ public class Main {
             }
             userChoice = scanner.nextInt();
             scanner.nextLine();
-        } while (userChoice < 0 || userChoice > 29);
+        } while (userChoice < 0 || userChoice > 28);
         return userChoice;
     }
 }

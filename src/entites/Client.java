@@ -72,13 +72,8 @@ public class Client {
         return this.sexe;
     }
 
-    public boolean setSexe(String sexe) {
-        if (sexe.length() > 50 || sexe.length() <= 0 ||sexe == null) {
-            return false;
-        } else {
-            this.sexe = sexe;
-            return true;
-        }
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
     }
     
     public String getNotel() {
