@@ -50,25 +50,25 @@ public class Main {
             } else if (userChoice == 15) {
                 searchHotel();
             } else if (userChoice == 16) {
-                addOrder();
+                displayRoom();
             } else if (userChoice == 17) {
-                deleteOrder();
+                addRoom();
             } else if (userChoice == 18) {
-                displaySupplier();
+                modifyRoom();
             } else if (userChoice == 19) {
-                addSupplier();
+                deleteRoom();
             } else if (userChoice == 20) {
-                modifySupplier();
+                searchRoom();
             } else if (userChoice == 21) {
-                deleteSupplier();
+                displayReservation();
             } else if (userChoice == 22) {
-                searchSupplier();
+                addReservation();
             } else if (userChoice == 23) {
-                displayStock();
+                modifyReservation();
             } else if (userChoice == 24) {
-                addStock();
+                deleteReservation();
             } else if (userChoice == 25) {
-                deleteStock();
+                searchReservation();
             } else if (userChoice == 26) {
                 displayPaiement();
             } else if (userChoice == 27) {
@@ -77,6 +77,8 @@ public class Main {
                 modifyPaiement();
             } else if (userChoice == 29) {
                 deletePaiement();
+            } else if (userChoice == 30) {
+                searchReservation();
             }
         }
     }
@@ -1186,27 +1188,578 @@ public class Main {
         } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void addOrder() {
+    public static void displayRoom() {
+        ArrayList<Chambre> chambres = new ArrayList<>();
+        chambres = new ChambreDAO().getAll();
 
+        System.out.print("------ Affichage des Chambres ------\n");
+        for (Chambre chambre : chambres) {
+            System.out.println(chambre);
+        }
     }
 
-    public static void deleteOrder() {
+    public static void addRoom() {
+        ChambreDAO chambreDAO = new ChambreDAO();
+        HotelDAO hotelDAO = new HotelDAO();
+        Chambre chambre = new Chambre();
+        int id_hotel;
+        int roomNumber;
+        int roomArea;
+        double pricePerNight;
+        boolean isInputValid = false;
+        String simpleOrDouble;
+        String bathroom;
+        String bathtub;
+        String tv;
+        String balcony;
+        String fridge;
+        String soundproof;
+        String response;
 
+        do {
+            System.out.println("------ Ajout d'une chambre ------");
+            displayRoom();
+            while (true) {
+                System.out.println("Veuillez choisir à quelle hotel appartiendra la chambre en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                if (scanner.hasNextInt()) {
+                    id_hotel = scanner.nextInt();
+                    scanner.nextLine();
+                    if (hotelDAO.getById(id_hotel) != null) {
+                        chambre.setId_hotel(id_hotel);
+                        break;
+                    }
+                    System.out.println("ID inexistant.\n");
+                } else {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.\n");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer le numero de la chambre uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    roomNumber = scanner.nextInt();
+                    if (roomNumber < 0) {
+                        System.out.println("Veuillez entrer une valeur positive. ");
+                    } else {
+                        scanner.nextLine();
+                        chambre.setChamberNumber(roomNumber);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer la taille de la chambre en m2, uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    roomArea = scanner.nextInt();
+                    if (roomArea <= 0) {
+                        System.out.println("Veuillez entrer une valeur positive.");
+                    } else {
+                        scanner.nextLine();
+                        chambre.setChamberArea(roomArea);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            while (!isInputValid) {
+                System.out.println("Est-ce une chambre simple ? (repondre par oui ou non) : ");
+                simpleOrDouble = scanner.nextLine();
+                if (isStringValid(simpleOrDouble)) {
+                    while (!"oui".equalsIgnoreCase(simpleOrDouble) || !"non".equalsIgnoreCase(simpleOrDouble)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("Est-ce une chambre simple ? : ");
+                        simpleOrDouble = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(simpleOrDouble)) {
+                        chambre.setIsSimple(simpleOrDouble);
+                    } else {
+                        chambre.setisDouble(simpleOrDouble);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'une salle de bain ? (repondre par oui ou non) : ");
+                bathroom = scanner.nextLine();
+                if (isStringValid(bathroom)) {
+                    while (!"oui".equalsIgnoreCase(bathroom) || !"non".equalsIgnoreCase(bathroom)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'une salle de bain ? : ");
+                        bathroom = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(bathroom)) {
+                        chambre.setBathroom(bathroom);
+                        System.out.println("La salle de bain dispose t'elle d'une baignoire ?");
+                        bathtub = scanner.nextLine();
+                        while (!"oui".equalsIgnoreCase(bathtub) || !"non".equalsIgnoreCase(bathtub)) {
+                            System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                            System.out.println("La chambre dispose t'elle d'une baignoire ? : ");
+                            bathtub = scanner.nextLine();
+                        }
+                        if ("oui".equalsIgnoreCase(bathtub)) {
+                            chambre.setBathtub(bathtub);
+                        }
+                    } else {
+                        chambre.setBathroom(bathroom);
+                        chambre.setBathtub(bathroom);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'une TV ? (repondre par oui ou non) : ");
+                tv = scanner.nextLine();
+                if (isStringValid(tv)) {
+                    while (!"oui".equalsIgnoreCase(tv) || !"non".equalsIgnoreCase(tv)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'une TV ? : ");
+                        tv = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(tv)) {
+                        chambre.setTv(tv);
+                    } else {
+                        chambre.setTv(tv);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'un balcon ? (repondre par oui ou non) : ");
+                balcony = scanner.nextLine();
+                if (isStringValid(balcony)) {
+                    while (!"oui".equalsIgnoreCase(balcony) || !"non".equalsIgnoreCase(balcony)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'un balcon ? : ");
+                        balcony = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(balcony)) {
+                        chambre.setBalcony(balcony);
+                    } else {
+                        chambre.setBalcony(balcony);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'un frigo ? (repondre par oui ou non) : ");
+                fridge = scanner.nextLine();
+                if (isStringValid(fridge)) {
+                    while (!"oui".equalsIgnoreCase(fridge) || !"non".equalsIgnoreCase(fridge)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'un frigo ? : ");
+                        fridge = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(fridge)) {
+                        chambre.setFridge(fridge);
+                    } else {
+                        chambre.setFridge(fridge);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'une insonorisation ? (repondre par oui ou non) : ");
+                soundproof = scanner.nextLine();
+                if (isStringValid(soundproof)) {
+                    while (!"oui".equalsIgnoreCase(soundproof) || !"non".equalsIgnoreCase(soundproof)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'une insonorisation ? : ");
+                        soundproof = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(soundproof)) {
+                        chambre.setSoundproof(soundproof);
+                    } else {
+                        chambre.setSoundproof(soundproof);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (true) {
+                System.out.println("Veuillez entrer le prix de la chambre uniquement en valeur numerique : ");
+                if (scanner.hasNextDouble()) {
+                    pricePerNight = scanner.nextDouble();
+                    if (pricePerNight < 0) {
+                        System.out.println("Veuillez entrer une valeur positive. ");
+                    } else {
+                        scanner.nextLine();
+                        chambre.setPricePerNight(pricePerNight);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            chambreDAO.save(chambre);
+            System.out.println("Voulez-vous ajouter une autre chambre ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void displaySupplier() {
+    public static void modifyRoom() {
+        ChambreDAO chambreDAO = new ChambreDAO();
+        HotelDAO hotelDAO = new HotelDAO();
+        Chambre chambre = new Chambre();
+        int id_hotel;
+        int roomNumber;
+        int roomArea;
+        double pricePerNight;
+        boolean isInputValid = false;
+        String simpleOrDouble;
+        String bathroom;
+        String bathtub;
+        String tv;
+        String balcony;
+        String fridge;
+        String soundproof;
+        String response;
+        int userChoice;
 
+        do {
+            System.out.println("------ Modifier une chambre ------");
+            while (true) {
+                displayRoom();
+                System.out.println("Veuillez entrer l'id de la chambre à modifier, uniquement en valeur numérique : ");
+                if (scanner.hasNextInt()) {
+                    userChoice = scanner.nextInt();
+                    scanner.nextLine();
+                    chambre = chambreDAO.getById(userChoice);
+                    if (chambreDAO != null) {
+                        break;
+                    } else {
+                        System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                    }
+                } else {
+                    System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                    scanner.nextLine();
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez choisir à quelle hotel appartiendra la chambre en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                if (scanner.hasNextInt()) {
+                    id_hotel = scanner.nextInt();
+                    scanner.nextLine();
+                    if (hotelDAO.getById(id_hotel) != null) {
+                        chambre.setId_hotel(id_hotel);
+                        break;
+                    }
+                    System.out.println("ID inexistant.\n");
+                } else {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.\n");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer le numero de la chambre uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    roomNumber = scanner.nextInt();
+                    if (roomNumber < 0) {
+                        System.out.println("Veuillez entrer une valeur positive. ");
+                    } else {
+                        scanner.nextLine();
+                        chambre.setChamberNumber(roomNumber);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer la taille de la chambre en m2, uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    roomArea = scanner.nextInt();
+                    if (roomArea <= 0) {
+                        System.out.println("Veuillez entrer une valeur positive.");
+                    } else {
+                        scanner.nextLine();
+                        chambre.setChamberArea(roomArea);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            while (!isInputValid) {
+                System.out.println("Est-ce une chambre simple ? (repondre par oui ou non) : ");
+                simpleOrDouble = scanner.nextLine();
+                if (isStringValid(simpleOrDouble)) {
+                    while (!"oui".equalsIgnoreCase(simpleOrDouble) || !"non".equalsIgnoreCase(simpleOrDouble)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("Est-ce une chambre simple ? : ");
+                        simpleOrDouble = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(simpleOrDouble)) {
+                        chambre.setIsSimple(simpleOrDouble);
+                    } else {
+                        chambre.setisDouble(simpleOrDouble);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'une salle de bain ? (repondre par oui ou non) : ");
+                bathroom = scanner.nextLine();
+                if (isStringValid(bathroom)) {
+                    while (!"oui".equalsIgnoreCase(bathroom) || !"non".equalsIgnoreCase(bathroom)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'une salle de bain ? : ");
+                        bathroom = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(bathroom)) {
+                        chambre.setBathroom(bathroom);
+                        System.out.println("La salle de bain dispose t'elle d'une baignoire ?");
+                        bathtub = scanner.nextLine();
+                        while (!"oui".equalsIgnoreCase(bathtub) || !"non".equalsIgnoreCase(bathtub)) {
+                            System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                            System.out.println("La chambre dispose t'elle d'une baignoire ? : ");
+                            bathtub = scanner.nextLine();
+                        }
+                        if ("oui".equalsIgnoreCase(bathtub)) {
+                            chambre.setBathtub(bathtub);
+                        }
+                    } else {
+                        chambre.setBathroom(bathroom);
+                        chambre.setBathtub(bathroom);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'une TV ? (repondre par oui ou non) : ");
+                tv = scanner.nextLine();
+                if (isStringValid(tv)) {
+                    while (!"oui".equalsIgnoreCase(tv) || !"non".equalsIgnoreCase(tv)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'une TV ? : ");
+                        tv = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(tv)) {
+                        chambre.setTv(tv);
+                    } else {
+                        chambre.setTv(tv);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'un balcon ? (repondre par oui ou non) : ");
+                balcony = scanner.nextLine();
+                if (isStringValid(balcony)) {
+                    while (!"oui".equalsIgnoreCase(balcony) || !"non".equalsIgnoreCase(balcony)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'un balcon ? : ");
+                        balcony = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(balcony)) {
+                        chambre.setBalcony(balcony);
+                    } else {
+                        chambre.setBalcony(balcony);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'un frigo ? (repondre par oui ou non) : ");
+                fridge = scanner.nextLine();
+                if (isStringValid(fridge)) {
+                    while (!"oui".equalsIgnoreCase(fridge) || !"non".equalsIgnoreCase(fridge)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'un frigo ? : ");
+                        fridge = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(fridge)) {
+                        chambre.setFridge(fridge);
+                    } else {
+                        chambre.setFridge(fridge);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (!isInputValid) {
+                System.out.println("La chambre dispose t'elle d'une insonorisation ? (repondre par oui ou non) : ");
+                soundproof = scanner.nextLine();
+                if (isStringValid(soundproof)) {
+                    while (!"oui".equalsIgnoreCase(soundproof) || !"non".equalsIgnoreCase(soundproof)) {
+                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
+                        System.out.println("La chambre dispose t'elle d'une insonorisation ? : ");
+                        soundproof = scanner.nextLine();
+                    }
+                    if ("oui".equalsIgnoreCase(soundproof)) {
+                        chambre.setSoundproof(soundproof);
+                    } else {
+                        chambre.setSoundproof(soundproof);
+                    }
+                    isInputValid = true;
+                } else {
+                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                }
+            }
+            isInputValid = false;
+
+            while (true) {
+                System.out.println("Veuillez entrer le prix de la chambre uniquement en valeur numerique : ");
+                if (scanner.hasNextDouble()) {
+                    pricePerNight = scanner.nextDouble();
+                    if (pricePerNight < 0) {
+                        System.out.println("Veuillez entrer une valeur positive. ");
+                    } else {
+                        scanner.nextLine();
+                        chambre.setPricePerNight(pricePerNight);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            chambreDAO.save(chambre);
+            System.out.println("Voulez-vous modifier une autre chambre ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void addSupplier() {
+    public static void deleteRoom() {
+        ReservationDAO reservationDAO = new ReservationDAO();
+        ChambreDAO chambreDAO = new ChambreDAO();
+        Chambre chambre;
+        String response;
+        String areYouSure;
+        int userChoice;
+        do {
+            System.out.println("Suppression d'une chambre");
+            displayRoom();
+            System.out.println("Veuillez entrer l'id de la chambre à supprimer, uniquement en valeur numérique : ");
+            if (scanner.hasNextInt()) {
+                userChoice = scanner.nextInt();
+                scanner.nextLine();
+                chambre = chambreDAO.getById(userChoice);
+                if (chambre != null) {
+                    System.out.println("la chambre sera TOTALEMENT \uD83D\uDCA5DETRUITE\uD83D\uDCA5 ainsi que les reservations lie a cette chambre, t'es sur de toi (repondre par oui ou non)?");
+                    areYouSure = scanner.nextLine();
+                    while (!"Oui".equalsIgnoreCase(areYouSure) && !"Non".equalsIgnoreCase(areYouSure)) {
+                        System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                        areYouSure = scanner.nextLine();
+                    }
+                    if ("Oui".equalsIgnoreCase(areYouSure)) {
+                        reservationDAO.deleteByIdChambre(userChoice);
+                        chambreDAO.deleteById(userChoice);
+                    } else {
+                        System.out.println("Suppression annulee");
+                    }
+                } else {
+                    System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                }
+            } else {
+                System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                scanner.nextLine();
+            }
 
+            System.out.println("Voulez-vous supprimer un autre hotel ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void modifySupplier() {
+    public static void searchRoom() {
+        ChambreDAO chambreDAO = new ChambreDAO();
+        ArrayList<Chambre> searchResults = new ArrayList<>();
+        String search;
+        String response;
 
+        do {
+            System.out.println("------ Recherche d'un Hotel ------");
+            System.out.println("Veuillez entrer le terme de la recherche ");
+            search = scanner.nextLine();
+            searchResults = chambreDAO.searchChambres(search);
+            if (searchResults != null) {
+                System.out.println("Resultat de la recherche : ");
+                for (Chambre chambre : searchResults) {
+                    System.out.println(chambre);
+                }
+            } else {
+                System.out.println("Aucun resultat trouve pour : " + search);
+            }
+            System.out.println("Voulez-vous rechercher une autre chambre ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void deleteSupplier() {
+    public static void displayReservation() {
 
     }
 
@@ -1266,6 +1819,7 @@ public class Main {
 
     }
 
+    public static void searchPaiement() {}
     public static int menu() {
         int userChoice;
         do {

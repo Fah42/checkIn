@@ -3,8 +3,8 @@ package entites;
 public class Chambre {
     int id;
     int chamberNumber;
-    int numberOfSimple;
-    int numberOfDouble;
+    String IsSimple;
+    String isDouble;
     int chamberArea;
     int id_hotel;
     String bathroom;
@@ -15,12 +15,12 @@ public class Chambre {
     String soundproof;
     double pricePerNight;
 
-    public Chambre(int id, int id_hotel, int chamberNumber, int numberOfSimple, int numberOfDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
+    public Chambre(int id, int id_hotel, int chamberNumber, String IsSimple, String isDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
         this.id = id;
         this.id_hotel = id_hotel;
         this.chamberNumber = chamberNumber;
-        this.numberOfSimple = numberOfSimple;
-        this.numberOfDouble = numberOfDouble;
+        this.IsSimple = IsSimple;
+        this.isDouble = isDouble;
         this.chamberArea = chamberArea;
         this.bathroom = bathroom;
         this.tv = tv;
@@ -30,10 +30,10 @@ public class Chambre {
         this.soundproof = soundproof;
         this.pricePerNight = pricePerNight;
     }
-    public Chambre(int chamberNumber, int numberOfSimple, int numberOfDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
+    public Chambre(int chamberNumber, String IsSimple, String isDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
         this.chamberNumber = chamberNumber;
-        this.numberOfSimple = numberOfSimple;
-        this.numberOfDouble = numberOfDouble;
+        this.IsSimple = IsSimple;
+        this.isDouble = isDouble;
         this.chamberArea = chamberArea;
         this.bathroom = bathroom;
         this.tv = tv;
@@ -71,20 +71,20 @@ public class Chambre {
         this.chamberNumber = chamberNumber;
     }
 
-    public int getNumberOfSimple() {
-        return numberOfSimple;
+    public String getIsSimple() {
+        return IsSimple;
     }
 
-    public void setNumberOfSimple(int numberOfSimple) {
-        this.numberOfSimple = numberOfSimple;
+    public void setIsSimple(String IsSimple) {
+        this.IsSimple = IsSimple;
     }
 
-    public int getNumberOfDouble() {
-        return numberOfDouble;
+    public String getisDouble() {
+        return isDouble;
     }
 
-    public void setNumberOfDouble(int numberOfDouble) {
-        this.numberOfDouble = numberOfDouble;
+    public void setisDouble(String isDouble) {
+        this.isDouble = isDouble;
     }
 
     public int getChamberArea() {
@@ -156,8 +156,8 @@ public class Chambre {
         return "Chambre{" +
                 "id=" + id +
                 ", chamberNumber=" + chamberNumber +
-                ", numberOfSimple=" + numberOfSimple +
-                ", numberOfDouble=" + numberOfDouble +
+                ", IsSimple=" + IsSimple +
+                ", isDouble=" + isDouble +
                 ", chamberArea=" + chamberArea +
                 ", bathroom='" + bathroom + '\'' +
                 ", tv='" + tv + '\'' +

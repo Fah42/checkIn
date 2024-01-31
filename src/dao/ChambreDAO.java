@@ -20,8 +20,8 @@ public class ChambreDAO {
                 ps.setString(7, chambre.getBathtub());
                 ps.setString(8, chambre.getSoundproof());
                 ps.setDouble(9, chambre.getPricePerNight());
-                ps.setInt(10, chambre.getNumberOfSimple());
-                ps.setInt(11, chambre.getNumberOfDouble());
+                ps.setString(10, chambre.getIsSimple());
+                ps.setString(11, chambre.getisDouble());
                 ps.setInt(12, chambre.getId_hotel());
                 ps.setInt(13, chambre.getId());
                 ps.executeUpdate();
@@ -37,8 +37,8 @@ public class ChambreDAO {
                 ps.setString(7, chambre.getBathtub());
                 ps.setString(8, chambre.getSoundproof());
                 ps.setDouble(9, chambre.getPricePerNight());
-                ps.setInt(10, chambre.getNumberOfSimple());
-                ps.setInt(11, chambre.getNumberOfDouble());
+                ps.setString(10, chambre.getIsSimple());
+                ps.setString(11, chambre.getisDouble());
                 ps.setInt(12, chambre.getId_hotel());
                 ps.executeUpdate();
                 System.out.println("Insert Ok !");
@@ -65,8 +65,8 @@ public class ChambreDAO {
             chambre.setBathtub(resultat.getString("baignoire"));
             chambre.setSoundproof(resultat.getString("insonorise"));
             chambre.setPricePerNight(resultat.getDouble("prixN"));
-            chambre.setNumberOfSimple(resultat.getInt("simple"));
-            chambre.setNumberOfDouble(resultat.getInt("double"));
+            chambre.setIsSimple(resultat.getString("simple"));
+            chambre.setisDouble(resultat.getString("double"));
             chambre.setId_hotel(resultat.getInt("id_hotel"));
             return chambre;
         } catch (Exception e) {
@@ -91,8 +91,8 @@ public class ChambreDAO {
                 chambre.setBathtub(resultat.getString("baignoire"));
                 chambre.setSoundproof(resultat.getString("insonorise"));
                 chambre.setPricePerNight(resultat.getDouble("prixN"));
-                chambre.setNumberOfSimple(resultat.getInt("simple"));
-                chambre.setNumberOfDouble(resultat.getInt("double"));
+                chambre.setIsSimple(resultat.getString("simple"));
+                chambre.setisDouble(resultat.getString("double"));
                 chambre.setId_hotel(resultat.getInt("id_hotel"));
                 chambres.add(chambre);
             }
@@ -141,8 +141,8 @@ public class ChambreDAO {
                 chambre.setBathtub(resultat.getString("baignoire"));
                 chambre.setSoundproof(resultat.getString("insonorise"));
                 chambre.setPricePerNight(resultat.getDouble("prixN"));
-                chambre.setNumberOfSimple(resultat.getInt("simple"));
-                chambre.setNumberOfDouble(resultat.getInt("double"));
+                chambre.setIsSimple(resultat.getString("simple"));
+                chambre.setisDouble(resultat.getString("double"));
                 chambre.setId_hotel(resultat.getInt("id_hotel"));
                 chambres.add(chambre);
             }
@@ -169,8 +169,8 @@ public class ChambreDAO {
             chambre.setBathtub(resultat.getString("baignoire"));
             chambre.setSoundproof(resultat.getString("insonorise"));
             chambre.setPricePerNight(resultat.getDouble("prixN"));
-            chambre.setNumberOfSimple(resultat.getInt("simple"));
-            chambre.setNumberOfDouble(resultat.getInt("double"));
+            chambre.setIsSimple(resultat.getString("simple"));
+            chambre.setisDouble(resultat.getString("double"));
             chambre.setId_hotel(resultat.getInt("id_hotel"));
             return chambre;
         } catch (Exception e) {
