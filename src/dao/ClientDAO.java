@@ -22,7 +22,7 @@ public class ClientDAO {
                 ps.setString(7,client.getSexe());
                 ps.setString(8,client.getNotel());
                 ps.setString(9,client.getCountry());
-                ps.setInt(5, client.getId());
+                ps.setInt(10, client.getId());
                 ps.executeUpdate();
                 System.out.println("Update Ok !");
             } else {
@@ -118,7 +118,6 @@ public class ClientDAO {
             ps.setString(6, "%" + searchTerm + "%");
             ps.setString(7, "%" + searchTerm + "%");
             ps.setString(8, "%" + searchTerm + "%");
-            ps.setString(9, "%" + searchTerm + "%");
             ResultSet resultat = ps.executeQuery();
             while (resultat.next()) {
                 Client client = new Client();

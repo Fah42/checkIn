@@ -162,15 +162,155 @@ public class Main {
     }
 
     public static void modifyCompany() {
-        
+        SocieteDAO societeDAO = new SocieteDAO();
+        Societe societe = new Societe();
+        String name;
+        String adress;
+        String siret;
+        String response;
+        int userChoice;
+        boolean isInputValid = false;
+
+        do {
+            System.out.println("------ Modifier une Societe ------");
+            while(true) {
+                displayCompany();
+                System.out.println("Veuillez entrer l'id de la societe à modifier, uniquement en valeur numérique : ");
+                if (scanner.hasNextInt()) {
+                    userChoice = scanner.nextInt();
+                    scanner.nextLine();
+                    societe = societeDAO.getById(userChoice);
+                    if (societe != null) {
+                        break;
+                    } else {
+                        System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                    }
+                } else {
+                    System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                    scanner.nextLine();
+                }
+            }
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le numero de siret de la societe : ");
+                siret = scanner.nextLine();
+                if (isStringValid(siret)){
+                    societe.setSiret(siret);
+                    isInputValid = true;
+                } else {
+                    System.out.println("Le numero de siret entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le nom de la societe : ");
+                name = scanner.nextLine();
+                if (isStringValid(name)){
+                    societe.setName(name);
+                    isInputValid = true;
+                } else {
+                    System.out.println("Le nom entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer l'adresse de la societe : ");
+                adress = scanner.nextLine();
+                if (isStringValid(adress)){
+                    societe.setAdress(adress);
+                    isInputValid = true;
+                } else {
+                    System.out.println("L'adresse entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+
+            societeDAO.save(societe);
+            System.out.println("Voulez-vous modifier une autre societe ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
     public static void deleteCompany() {
-        
+        SocieteDAO societeDAO = new SocieteDAO();
+        ChambreDAO chambreDAO = new ChambreDAO();
+        HotelDAO hotelDAO = new HotelDAO();
+        Hotel hotel;
+        Societe societe;
+        String response;
+        String areYouSure;
+        int userChoice;
+        do {
+            System.out.println("Suppression d'une Societe");
+            displayCompany();
+            System.out.println("Veuillez entrer l'id de la societe à supprimer, uniquement en valeur numérique : ");
+            if (scanner.hasNextInt()) {
+                userChoice = scanner.nextInt();
+                scanner.nextLine();
+                societe = societeDAO.getById(userChoice);
+                if (societe != null) {
+                    hotel = hotelDAO.getByIdCompany(userChoice);
+                    System.out.println("Si La societe dispose d'un ou plusieurs hotels qui seront aussi TOTALEMENT \uD83D\uDCA5DETRUIT\uD83D\uDCA5, t'es sur de toi (repondre par oui ou non)?");
+                    areYouSure = scanner.nextLine();
+                    while (!"Oui".equalsIgnoreCase(areYouSure) && !"Non".equalsIgnoreCase(areYouSure)){
+                        System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                        areYouSure = scanner.nextLine();
+                    }
+                    if("Oui".equalsIgnoreCase(areYouSure)) {
+                        if (hotel != null) {
+                            chambreDAO.deleteByIdHotel(hotel.getId());
+                            hotelDAO.deleteByIdCompany(userChoice);
+                        }
+                        societeDAO.deleteById(userChoice);
+                    }
+                } else {
+                    System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                }
+            } else {
+                System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                scanner.nextLine();
+            }
+
+            System.out.println("Voulez-vous supprimer une autre societe ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
     public static void searchCompany() {
-        
+        SocieteDAO societeDAO = new SocieteDAO();
+        ArrayList<Societe> searchResults = new ArrayList<>();
+        String search;
+        String response;
+
+        do {
+            System.out.println("------ Recherche d'une societe ------");
+            System.out.println("Veuillez entrer le terme de la recherche ");
+            search = scanner.nextLine();
+            searchResults = societeDAO.searchSocietes(search);
+            if (searchResults != null) {
+                System.out.println("Resultat de la recherche : ");
+                for (Societe societe : searchResults) {
+                    System.out.println(societe);
+                }
+            } else {
+                System.out.println("Aucun resultat trouve pour : " + search);
+            }
+            System.out.println("Voulez-vous rechercher une autre societe ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
     public static void displayClient() {
@@ -317,10 +457,159 @@ public class Main {
     }
 
     public static void modifyClient() {
-        
+        ClientDAO clientDAO = new ClientDAO();
+        Client client = new Client();
+        boolean isInputValid = false;
+        String firstname;
+        String lastname;
+        String response;
+        String city;
+        String adress;
+        String email;
+        String sexe;
+        String numTel;
+        String country;
+        int age;
+        int userChoice;
+
+        do {
+            displayClient();
+            System.out.println("------ Modifier un Client ------");
+
+            while(true) {
+                displayCompany();
+                System.out.println("Veuillez entrer l'id de la societe à modifier, uniquement en valeur numérique : ");
+                if (scanner.hasNextInt()) {
+                    userChoice = scanner.nextInt();
+                    scanner.nextLine();
+                    client = clientDAO.getById(userChoice);
+                    if (client != null) {
+                        break;
+                    } else {
+                        System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                    }
+                } else {
+                    System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                    scanner.nextLine();
+                }
+            }
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le nom du client : ");
+                lastname = scanner.nextLine();
+                if (client.setNom(lastname)){
+                    isInputValid = true;
+                } else {
+                    System.out.println("Le nom entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le prenom du client : ");
+                firstname = scanner.nextLine();
+                if (client.setPrenom(firstname)){
+                    isInputValid = true;
+                } else {
+                    System.out.println("Le prenom entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(true) {
+                System.out.println("Veuillez entrer l'age uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    age = scanner.nextInt();
+                    if (age <= 0 ) {
+                        System.out.println("Veuillez entrer une valeur positive.");
+                    } else {
+                        scanner.nextLine();
+                        client.setAge(age);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le ville du client : ");
+                city = scanner.nextLine();
+
+                if (client.setVille(city)){
+                    isInputValid = true;
+                } else {
+                    System.out.println("La ville entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer l'adresse du client , numero de rue, nom de rue, zip code: ");
+                adress = scanner.nextLine();
+
+                if (client.setAdress(adress)){
+                    isInputValid = true;
+                } else {
+                    System.out.println("L'adresse entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer l'email du client : ");
+                email = scanner.nextLine();
+
+                if (client.setEmail(email)){
+                    isInputValid = true;
+                } else {
+                    System.out.println("L'email entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            do {
+                System.out.println("Veuillez entrer le sexe du client (homme / femme): ");
+                sexe = scanner.nextLine();
+                client.setSexe(sexe);
+            } while (!"homme".equalsIgnoreCase(sexe) && !"femme".equalsIgnoreCase(sexe));
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le numero de telephone du client : ");
+                numTel = scanner.nextLine();
+
+                if (client.setNotel(numTel)){
+                    isInputValid = true;
+                } else {
+                    System.out.println("Le numero de telephone entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le pays du client : ");
+                country = scanner.nextLine();
+
+                if (client.setCountry(country)){
+                    isInputValid = true;
+                } else {
+                    System.out.println("Le pays entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            clientDAO.save(client);
+            System.out.println("Voulez-vous modifier un autre client ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
     public static void deleteClient() {
-        
+
     }
 
     public static void searchClient() {

@@ -12,11 +12,11 @@ public class SocieteDAO {
     public void save(Societe societe) {
         try {
             if(societe.getId() != 0) {
-                PreparedStatement ps = Database.connexion.prepareStatement("UPDATE societe SET siret = ?, nom = ?, adresse = ?, WHERE id = ?");
+                PreparedStatement ps = Database.connexion.prepareStatement("UPDATE societe SET siret = ?, nom = ?, adresse = ? WHERE id = ?");
                 ps.setString(1, societe.getSiret());
                 ps.setString(2, societe.getName());
                 ps.setString(3, societe.getAdress());
-                ps.setInt(5, societe.getId());
+                ps.setInt(4, societe.getId());
                 ps.executeUpdate();
                 System.out.println("Update Ok !");
             } else {
@@ -65,7 +65,6 @@ public class SocieteDAO {
             u.setAdress(resultat.getString("adresse"));
             return u;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -82,7 +81,7 @@ public class SocieteDAO {
     public ArrayList<Societe> searchSocietes(String searchTerm) {
         ArrayList<Societe> societes = new ArrayList<>();
         try {
-            PreparedStatement ps = Database.connexion.prepareStatement("SELECT * FROM societe WHERE siret LIKE ? OR nom LIKE ? OR adress LIKE ?");
+            PreparedStatement ps = Database.connexion.prepareStatement("SELECT * FROM societe WHERE siret LIKE ? OR nom LIKE ? OR adresse LIKE ?");
             ps.setString(1, "%" + searchTerm + "%");
             ps.setString(2, "%" + searchTerm + "%");
             ps.setString(3, "%" + searchTerm + "%");
@@ -97,6 +96,7 @@ public class SocieteDAO {
             }
             return societes;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
