@@ -2,18 +2,18 @@ package entites;
 
 public class Societe {
     int id;
-    int siret;
+    String siret;
     String name;
     String adress;
 
-    public Societe(int id, int siret, String name, String adress) {
+    public Societe(int id, String siret, String name, String adress) {
         this.id = id;
         this.siret = siret;
         this.name = name;
         this.adress = adress;
     }
 
-    public Societe(int siret, String name, String adress) {
+    public Societe(String siret, String name, String adress) {
         this.siret = siret;
         this.name = name;
         this.adress = adress;
@@ -38,11 +38,11 @@ public class Societe {
         this.adress = adress;
     }
 
-    public int getSiret() {
+    public String getSiret() {
         return siret;
     }
 
-    public void setSiret(int siret) {
+    public void setSiret(String siret) {
         this.siret = siret;
     }
 

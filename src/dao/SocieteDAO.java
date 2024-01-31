@@ -13,7 +13,7 @@ public class SocieteDAO {
         try {
             if(societe.getId() != 0) {
                 PreparedStatement ps = Database.connexion.prepareStatement("UPDATE societe SET siret = ?, nom = ?, adresse = ?, WHERE id = ?");
-                ps.setInt(1, societe.getSiret());
+                ps.setString(1, societe.getSiret());
                 ps.setString(2, societe.getName());
                 ps.setString(3, societe.getAdress());
                 ps.setInt(5, societe.getId());
@@ -21,7 +21,7 @@ public class SocieteDAO {
                 System.out.println("Update Ok !");
             } else {
                 PreparedStatement ps = Database.connexion.prepareStatement("INSERT INTO societe (siret, nom, adresse) VALUES (?,?,?)");
-                ps.setInt(1, societe.getSiret());
+                ps.setString(1, societe.getSiret());
                 ps.setString(2, societe.getName());
                 ps.setString(3, societe.getAdress());
                 ps.executeUpdate();
@@ -41,7 +41,7 @@ public class SocieteDAO {
                 Societe u = new Societe();
                 u.setId(resultat.getInt("id"));
                 u.setName(resultat.getString("nom"));
-                u.setSiret(resultat.getInt("siret"));
+                u.setSiret(resultat.getString("siret"));
                 u.setAdress(resultat.getString("adresse"));
                 societes.add(u);
             }
@@ -61,7 +61,7 @@ public class SocieteDAO {
             Societe u = new Societe();
             u.setId(resultat.getInt("id"));
             u.setName(resultat.getString("nom"));
-            u.setSiret(resultat.getInt("siret"));
+            u.setSiret(resultat.getString("siret"));
             u.setAdress(resultat.getString("adresse"));
             return u;
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class SocieteDAO {
             while (resultat.next()) {
                 Societe societe = new Societe();
                 societe.setId(resultat.getInt("id"));
-                societe.setSiret(resultat.getInt("siret"));
+                societe.setSiret(resultat.getString("siret"));
                 societe.setName(resultat.getString("nom"));
                 societe.setAdress(resultat.getString("adresse"));
                 societes.add(societe);

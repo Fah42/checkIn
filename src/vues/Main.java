@@ -92,6 +92,9 @@ public class Main {
         return 0.0;
     }
 
+    public static boolean isStringValid(@org.jetbrains.annotations.NotNull String stringToCheck) {
+        return stringToCheck.length() <= 50 && !stringToCheck.isEmpty();
+    }
     public static void displayCompany() {
         ArrayList<Societe> societes = new ArrayList<>();
         societes = new SocieteDAO().getAll();
@@ -102,7 +105,60 @@ public class Main {
     }
 
     public static void addCompany() {
-        
+        SocieteDAO societeDAO = new SocieteDAO();
+        Societe societe = new Societe();
+        String name;
+        String adress;
+        String siret;
+        String response;
+        boolean isInputValid = false;
+
+        do {
+            displayCompany();
+            System.out.println("------ Ajout de Societe ------");
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le numero de siret de la societe : ");
+                siret = scanner.nextLine();
+                if (isStringValid(siret)){
+                    societe.setSiret(siret);
+                    isInputValid = true;
+                } else {
+                    System.out.println("Le numero de siret entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer le nom de la societe : ");
+                name = scanner.nextLine();
+                if (isStringValid(name)){
+                    societe.setName(name);
+                    isInputValid = true;
+                } else {
+                    System.out.println("Le nom entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+            isInputValid = false;
+
+            while(!isInputValid){
+                System.out.println("Veuillez entrer l'adresse de la societe : ");
+                adress = scanner.nextLine();
+                if (isStringValid(adress)){
+                    societe.setAdress(adress);
+                    isInputValid = true;
+                } else {
+                    System.out.println("L'adresse entré n'est pas valide. Veuillez réessayer.");
+                }
+            }
+
+            societeDAO.save(societe);
+            System.out.println("Voulez-vous ajouter une autre societe ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
     public static void modifyCompany() {
@@ -143,7 +199,7 @@ public class Main {
         int age;
 
         do {
-            //displayClient();
+            displayClient();
             System.out.println("------ Ajout de Client ------");
             while(!isInputValid){
                 System.out.println("Veuillez entrer le nom du client : ");
@@ -263,7 +319,6 @@ public class Main {
     public static void modifyClient() {
         
     }
-
     public static void deleteClient() {
         
     }
