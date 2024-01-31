@@ -4,20 +4,21 @@ import entites.Database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.time.LocalTime;
 
 public class HotelDAO {
     public static void save (Hotel hotel) {
     try {
         if (hotel.getId() != 0) {
-            PreparedStatement ps = Database.connexion.prepareStatement("UPDATE hotel SET nom = ?, adresse = ?, ville = ?, description = ?, parking = ?, wifi = ?, checkIn = ?, checkOut = ?, piscine = ?, navette = ?, cat = ?, id_societe = ? WHERE id = ?");
+            PreparedStatement ps = Database.connexion.prepareStatement("UPDATE hotel SET nom = ?, adresse = ?, ville = ?, description = ?, parking = ?, wifi = ?, checkIn = ?, checkOut = ?, piscine = ?, navette = ?, animaux = ?, cat = ?, id_societe = ? WHERE id = ?");
             ps.setString(1, hotel.getNom());
             ps.setString(2, hotel.getAdress());
             ps.setString(3, hotel.getCity());
             ps.setString(4, hotel.getDesc());
             ps.setString(5, hotel.getParking());
             ps.setString(6, hotel.getWifi());
-            ps.setDate(7, hotel.getCheckIn());
-            ps.setDate(8, hotel.getCheckOut());
+            ps.setTime(7, hotel.getCheckIn());
+            ps.setTime(8, hotel.getCheckOut());
             ps.setString(9, hotel.getPool());
             ps.setString(10, hotel.getShuttle());
             ps.setString(11, hotel.getAnimals());
@@ -27,15 +28,15 @@ public class HotelDAO {
             ps.executeUpdate();
             System.out.println("Update Ok !");
         } else {
-            PreparedStatement ps = Database.connexion.prepareStatement("INSERT INTO hotel (nom, adresse, ville, description, parking, wifi, checkIn, checkOut, piscine, navette, cat, id_categorie) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement ps = Database.connexion.prepareStatement("INSERT INTO hotel (nom, adresse, ville, description, parking, wifi, checkIn, checkOut, piscine, navette, animaux, cat, id_societe) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, hotel.getNom());
             ps.setString(2, hotel.getAdress());
             ps.setString(3, hotel.getCity());
             ps.setString(4, hotel.getDesc());
             ps.setString(5, hotel.getParking());
             ps.setString(6, hotel.getWifi());
-            ps.setDate(7, hotel.getCheckIn());
-            ps.setDate(8, hotel.getCheckOut());
+            ps.setTime(7, hotel.getCheckIn());
+            ps.setTime(8, hotel.getCheckOut());
             ps.setString(9, hotel.getPool());
             ps.setString(10, hotel.getShuttle());
             ps.setString(11, hotel.getAnimals());
@@ -63,8 +64,8 @@ public class HotelDAO {
             hotel.setDesc(resultat.getString("description"));
             hotel.setParking(resultat.getString("parking"));
             hotel.setWifi(resultat.getString("wifi"));
-            hotel.setCheckIn(resultat.getDate("checkIn"));
-            hotel.setCheckOut(resultat.getDate("checkOut"));
+            hotel.setCheckIn(resultat.getTime("checkIn"));
+            hotel.setCheckOut(resultat.getTime("checkOut"));
             hotel.setPool(resultat.getString("piscine"));
             hotel.setShuttle(resultat.getString("navette"));
             hotel.setAnimals(resultat.getString("animaux"));
@@ -90,8 +91,8 @@ public class HotelDAO {
                 hotel.setDesc(resultat.getString("description"));
                 hotel.setParking(resultat.getString("parking"));
                 hotel.setWifi(resultat.getString("wifi"));
-                hotel.setCheckIn(resultat.getDate("checkIn"));
-                hotel.setCheckOut(resultat.getDate("checkOut"));
+                hotel.setCheckIn(resultat.getTime("checkIn"));
+                hotel.setCheckOut(resultat.getTime("checkOut"));
                 hotel.setPool(resultat.getString("piscine"));
                 hotel.setShuttle(resultat.getString("navette"));
                 hotel.setAnimals(resultat.getString("animaux"));
@@ -141,8 +142,8 @@ public class HotelDAO {
                 hotel.setDesc(resultat.getString("description"));
                 hotel.setParking(resultat.getString("parking"));
                 hotel.setWifi(resultat.getString("wifi"));
-                hotel.setCheckIn(resultat.getDate("checkIn"));
-                hotel.setCheckOut(resultat.getDate("checkOut"));
+                hotel.setCheckIn(resultat.getTime("checkIn"));
+                hotel.setCheckOut(resultat.getTime("checkOut"));
                 hotel.setPool(resultat.getString("piscine"));
                 hotel.setShuttle(resultat.getString("navette"));
                 hotel.setAnimals(resultat.getString("animaux"));
@@ -171,8 +172,8 @@ public class HotelDAO {
             hotel.setDesc(resultat.getString("description"));
             hotel.setParking(resultat.getString("parking"));
             hotel.setWifi(resultat.getString("wifi"));
-            hotel.setCheckIn(resultat.getDate("checkIn"));
-            hotel.setCheckOut(resultat.getDate("checkOut"));
+            hotel.setCheckIn(resultat.getTime("checkIn"));
+            hotel.setCheckOut(resultat.getTime("checkOut"));
             hotel.setPool(resultat.getString("piscine"));
             hotel.setShuttle(resultat.getString("navette"));
             hotel.setAnimals(resultat.getString("animaux"));

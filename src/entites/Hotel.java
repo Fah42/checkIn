@@ -1,5 +1,5 @@
 package entites;
-import java.sql.Date;
+import java.sql.Time;
 
 public class Hotel {
     String nom;
@@ -8,8 +8,8 @@ public class Hotel {
     String desc;
     String parking;
     String wifi;
-    Date checkIn;
-    Date checkOut;
+    Time checkIn;
+    Time checkOut;
     String pool;
     String shuttle;
     String animals;
@@ -17,7 +17,7 @@ public class Hotel {
     int id_societe;
     int id;
 
-    public Hotel(int id, String nom, String adress, String city, String desc, String parking, String wifi, Date checkIn, Date checkOut, String pool, String shuttle, String animals, int star, int id_societe) {
+    public Hotel(int id, String nom, String adress, String city, String desc, String parking, String wifi, Time checkIn, Time checkOut, String pool, String shuttle, String animals, int star, int id_societe) {
         this.id = id;
         this.nom = nom;
         this.adress = adress;
@@ -34,7 +34,7 @@ public class Hotel {
         this.id_societe = id_societe;
     }
 
-    public Hotel(String nom, String adress, String city, String desc, String parking, String wifi, Date checkIn, Date checkOut, String pool, String shuttle, String animals, int star, int id_societe) {
+    public Hotel(String nom, String adress, String city, String desc, String parking, String wifi, Time checkIn, Time checkOut, String pool, String shuttle, String animals, int star, int id_societe) {
         this.nom = nom;
         this.adress = adress;
         this.city = city;
@@ -102,19 +102,19 @@ public class Hotel {
         this.wifi = wifi;
     }
 
-    public Date getCheckIn() {
+    public Time getCheckIn() {
         return checkIn;
     }
 
-    public void setCheckIn(Date checkIn) {
+    public void setCheckIn(Time checkIn) {
         this.checkIn = checkIn;
     }
 
-    public Date getCheckOut() {
+    public Time getCheckOut() {
         return checkOut;
     }
 
-    public void setCheckOut(Date checkOut) {
+    public void setCheckOut(Time checkOut) {
         this.checkOut = checkOut;
     }
 
@@ -169,20 +169,20 @@ public class Hotel {
     @Override
     public String toString() {
         return "Hotel{" +
-                "nom='" + nom + '\'' +
-                ", adress='" + adress + '\'' +
-                ", city='" + city + '\'' +
-                ", desc='" + desc + '\'' +
-                ", parking='" + parking + '\'' +
-                ", wifi='" + wifi + '\'' +
-                ", checkIn=" + checkIn +
-                ", checkOut=" + checkOut +
-                ", pool='" + pool + '\'' +
-                ", shuttle='" + shuttle + '\'' +
-                ", animals='" + animals + '\'' +
-                ", star=" + star +
-                ", id_societe=" + id_societe +
-                ", id=" + id +
+                ", id = " + id + '\'' +
+                "nom = '" + nom + '\'' +
+                ", adress = '" + adress + '\'' +
+                ", city = '" + city + '\'' +
+                ", desc = '" + desc + '\'' +
+                ", parking = '" + parking + '\'' +
+                ", wifi = '" + wifi + '\'' +
+                ", checkIn = " + checkIn +
+                ", checkOut = " + checkOut +
+                ", pool = '" + pool + '\'' +
+                ", shuttle = '" + shuttle + '\'' +
+                ", animals = '" + animals + '\'' +
+                ", star = " + star +
+                ", id_societe = " + id_societe +
                 '}';
     }
 }
