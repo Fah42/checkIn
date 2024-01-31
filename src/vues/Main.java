@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 import java.time.format.DateTimeParseException;
 
@@ -86,6 +87,15 @@ public class Main {
     public static boolean isDateFormatValid(String userInput, DateTimeFormatter timeFormatter) {
         try {
             LocalDate.parse(userInput, timeFormatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    public static boolean isDateFormatValid(String userInput) {
+        try {
+            LocalDate.parse(userInput);
             return true;
         } catch (DateTimeParseException e) {
             return false;
@@ -1760,23 +1770,318 @@ public class Main {
     }
 
     public static void displayReservation() {
+        ArrayList<Reservation> reservations = new ArrayList<>();
+        reservations = new ReservationDAO().getAll();
 
+        System.out.print("------ Affichage des Resevations ------\n");
+        for (Reservation reservation : reservations) {
+            System.out.println(reservation);
+        }
     }
 
-    public static void searchSupplier() {
+    public static void addReservation() {
+        ClientDAO clientDAO = new ClientDAO();
+        ChambreDAO chambreDAO = new ChambreDAO();
+        ReservationDAO reservationDAO = new ReservationDAO();
+        Reservation reservation = new Reservation();
+        int id_chambre;
+        int id_client;
+        int nb_personne;
+        String jour_arrive;
+        String jour_depart;
+        String response;
 
+        do {
+            System.out.println("------ Ajout d'une reservation ------");
+            while (true) {
+                displayClient();
+                System.out.println("Veuillez choisir à quelle client appartiendra la reservation en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                if (scanner.hasNextInt()) {
+                    id_client = scanner.nextInt();
+                    scanner.nextLine();
+                    if (clientDAO.getById(id_client) != null) {
+                        reservation.setId_client(id_client);
+                        break;
+                    }
+                    System.out.println("ID inexistant.\n");
+                } else {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.\n");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                displayRoom();
+                System.out.println("Veuillez choisir la chambre pour la reservation en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                if (scanner.hasNextInt()) {
+                    id_chambre = scanner.nextInt();
+                    scanner.nextLine();
+                    if (chambreDAO.getById(id_chambre) != null) {
+                        reservation.setId_chambre(id_chambre);
+                        break;
+                    }
+                    System.out.println("ID inexistant.\n");
+                } else {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.\n");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer la date d'arrivee au format YYYY-MM-DD : ");
+                jour_arrive = scanner.nextLine();
+                if (isDateFormatValid(jour_arrive)) {
+                    LocalDate localDate = LocalDate.parse(jour_arrive);
+                    java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
+                    reservation.setJour_arrive(sqlDate);
+                    break;
+                } else {
+                    System.out.println("L'entrée n'est pas une date valide. Veuillez entrer une date au format YYYY-MM-DD.");
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer la date de départ au format YYYY-MM-DD : ");
+                jour_depart = scanner.nextLine();
+                if (isDateFormatValid(jour_depart)) {
+                    LocalDate localDateDepart = LocalDate.parse(jour_depart);
+                    java.sql.Date sqlDateDepart = java.sql.Date.valueOf(localDateDepart);
+                    LocalDate localDateArrivee = reservation.getJour_arrive().toLocalDate();
+                    if (!localDateDepart.isBefore(localDateArrivee)) {
+                        reservation.setJour_depart(sqlDateDepart);
+                        break;
+                    } else {
+                        System.out.println("La date de départ doit être postérieure à la date d'arrivée.");
+                    }
+                } else {
+                    System.out.println("L'entrée n'est pas une date valide. Veuillez entrer une date au format YYYY-MM-DD.");
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer le nombre d'etoile uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    nb_personne = scanner.nextInt();
+                    if (nb_personne <= 0) {
+                        System.out.println("Veuillez entrer une valeur positive. Qui ne depasse pas 5");
+                    } else {
+                        scanner.nextLine();
+                        reservation.setNb_personne(nb_personne);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            reservationDAO.save(reservation);
+            System.out.println("Voulez-vous ajouter une autre reservation ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void displayStock() {
+    public static void modifyReservation() {
+        ClientDAO clientDAO = new ClientDAO();
+        ChambreDAO chambreDAO = new ChambreDAO();
+        ReservationDAO reservationDAO = new ReservationDAO();
+        Reservation reservation = new Reservation();
+        int id_chambre;
+        int id_client;
+        int nb_personne;
+        String jour_arrive;
+        String jour_depart;
+        String response;
+        int userChoice;
 
+        do {
+            System.out.println("------ modification d'une reservation ------");
+
+            while (true) {
+                displayReservation();
+                System.out.println("Veuillez choisir à quelle reservation vous souhaitez modifier en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                if (scanner.hasNextInt()) {
+                    userChoice = scanner.nextInt();
+                    scanner.nextLine();
+                    if (reservationDAO.getById(userChoice) != null) {
+                        reservation.setId_client(userChoice);
+                        break;
+                    }
+                    System.out.println("ID inexistant.\n");
+                } else {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.\n");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                displayClient();
+                System.out.println("Veuillez choisir à quelle client appartiendra la reservation en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                if (scanner.hasNextInt()) {
+                    id_client = scanner.nextInt();
+                    scanner.nextLine();
+                    if (clientDAO.getById(id_client) != null) {
+                        reservation.setId_client(id_client);
+                        break;
+                    }
+                    System.out.println("ID inexistant.\n");
+                } else {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.\n");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                displayRoom();
+                System.out.println("Veuillez choisir la chambre pour la reservation en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                if (scanner.hasNextInt()) {
+                    id_chambre = scanner.nextInt();
+                    scanner.nextLine();
+                    if (chambreDAO.getById(id_chambre) != null) {
+                        reservation.setId_chambre(id_chambre);
+                        break;
+                    }
+                    System.out.println("ID inexistant.\n");
+                } else {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.\n");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer la date d'arrivee au format YYYY-MM-DD : ");
+                jour_arrive = scanner.nextLine();
+                if (isDateFormatValid(jour_arrive)) {
+                    LocalDate localDate = LocalDate.parse(jour_arrive);
+                    java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
+                    reservation.setJour_arrive(sqlDate);
+                    break;
+                } else {
+                    System.out.println("L'entrée n'est pas une date valide. Veuillez entrer une date au format YYYY-MM-DD.");
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer la date de départ au format YYYY-MM-DD : ");
+                jour_depart = scanner.nextLine();
+                if (isDateFormatValid(jour_depart)) {
+                    LocalDate localDateDepart = LocalDate.parse(jour_depart);
+                    java.sql.Date sqlDateDepart = java.sql.Date.valueOf(localDateDepart);
+                    LocalDate localDateArrivee = reservation.getJour_depart().toLocalDate();
+                    if (!localDateDepart.isBefore(localDateArrivee)) {
+                        reservation.setJour_depart(sqlDateDepart);
+                        break;
+                    } else {
+                        System.out.println("La date de départ doit être postérieure à la date d'arrivée.");
+                    }
+                } else {
+                    System.out.println("L'entrée n'est pas une date valide. Veuillez entrer une date au format YYYY-MM-DD.");
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez entrer le nombre d'etoile uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    nb_personne = scanner.nextInt();
+                    if (nb_personne <= 0) {
+                        System.out.println("Veuillez entrer une valeur positive. Qui ne depasse pas 5");
+                    } else {
+                        scanner.nextLine();
+                        reservation.setNb_personne(nb_personne);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
+
+            reservationDAO.save(reservation);
+            System.out.println("Voulez-vous ajouter une autre reservation ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void addStock() {
+    public static void deleteReservation() {
+        ReservationDAO reservationDAO = new ReservationDAO();
+        PaiementDAO paiementDAO = new PaiementDAO();
+        Reservation reservation;
+        String response;
+        String areYouSure;
+        int userChoice;
 
+        do {
+            System.out.println("Suppression d'une reservation");
+            displayRoom();
+            System.out.println("Veuillez entrer l'id de la reservation à supprimer, uniquement en valeur numérique : ");
+            if (scanner.hasNextInt()) {
+                userChoice = scanner.nextInt();
+                scanner.nextLine();
+                reservation = reservationDAO.getById(userChoice);
+                if (reservation != null) {
+                    System.out.println("la reservation sera TOTALEMENT \uD83D\uDCA5DETRUITE\uD83D\uDCA5 ainsi que les paiements lie a cette reservation, t'es sur de toi (repondre par oui ou non)?");
+                    areYouSure = scanner.nextLine();
+                    while (!"Oui".equalsIgnoreCase(areYouSure) && !"Non".equalsIgnoreCase(areYouSure)) {
+                        System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                        areYouSure = scanner.nextLine();
+                    }
+                    if ("Oui".equalsIgnoreCase(areYouSure)) {
+                        paiementDAO.deleteByIdReservation(userChoice);
+                        reservationDAO.deleteById(userChoice);
+                    } else {
+                        System.out.println("Suppression annulee");
+                    }
+                } else {
+                    System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                }
+            } else {
+                System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                scanner.nextLine();
+            }
+
+            System.out.println("Voulez-vous supprimer une autre reservation ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void deleteStock() {
+    public static void searchReservation() {
+        ReservationDAO reservationDAO = new ReservationDAO();
+        ArrayList<Reservation> searchResults = new ArrayList<>();
+        String search;
+        String response;
 
+        do {
+            System.out.println("------ Recherche d'une reservation ------");
+            System.out.println("Veuillez entrer le terme de la recherche ");
+            search = scanner.nextLine();
+            searchResults = reservationDAO.searchReservations(search);
+            if (searchResults != null) {
+                System.out.println("Resultat de la recherche : ");
+                for (Reservation reservation : searchResults) {
+                    System.out.println(reservation);
+                }
+            } else {
+                System.out.println("Aucun resultat trouve pour : " + search);
+            }
+            System.out.println("Voulez-vous rechercher une autre reservation ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
     /**

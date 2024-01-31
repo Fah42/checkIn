@@ -11,22 +11,22 @@ public class ReservationDAO {
     public static void save (Reservation reservation) {
         try {
             if (reservation.getId() != 0) {
-                PreparedStatement ps = Database.connexion.prepareStatement("UPDATE reservation SET id_chambre = ?, id_client = ?, nb_personne = ?, heure_arrive = ?, heure_depart = ?  WHERE id = ?");
+                PreparedStatement ps = Database.connexion.prepareStatement("UPDATE reservation SET id_chambre = ?, id_client = ?, nb_personne = ?, jour_arrive = ?, jour_depart = ?  WHERE id = ?");
                 ps.setInt(1, reservation.getId_chambre());
                 ps.setInt(2, reservation.getId_client());
                 ps.setInt(3, reservation.getNb_personne());
-                ps.setDate(4, reservation.getHeure_arrive());
-                ps.setDate(5, reservation.getHeure_depart());
+                ps.setDate(4, reservation.getJour_arrive());
+                ps.setDate(5, reservation.getJour_depart());
                 ps.setInt(6, reservation.getId());
                 ps.executeUpdate();
                 System.out.println("Update Ok !");
             } else {
-                PreparedStatement ps = Database.connexion.prepareStatement("INSERT INTO reservation (id_chambre, id_client, nb_personne, heure_arrive, heure_depart) VALUES (?,?,?,?,?)");
+                PreparedStatement ps = Database.connexion.prepareStatement("INSERT INTO reservation (id_chambre, id_client, nb_personne, jour_arrive, jour_depart) VALUES (?,?,?,?,?)");
                 ps.setInt(1, reservation.getId_chambre());
                 ps.setInt(2, reservation.getId_client());
                 ps.setInt(3, reservation.getNb_personne());
-                ps.setDate(4, reservation.getHeure_arrive());
-                ps.setDate(4, reservation.getHeure_depart());
+                ps.setDate(4, reservation.getJour_arrive());
+                ps.setDate(4, reservation.getJour_depart());
                 ps.executeUpdate();
                 System.out.println("Insert Ok !");
             }
@@ -45,8 +45,8 @@ public class ReservationDAO {
             reservation.setId_chambre(resultat.getInt("id_chambre"));
             reservation.setId_client(resultat.getInt("id_client"));
             reservation.setNb_personne(resultat.getInt("nb_personne"));
-            reservation.setHeure_arrive(resultat.getDate("heure_arrive"));
-            reservation.setHeure_depart(resultat.getDate("heure_depart"));
+            reservation.setJour_arrive(resultat.getDate("jour_arrive"));
+            reservation.setJour_depart(resultat.getDate("jour_depart"));
             return reservation;
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,8 +64,8 @@ public class ReservationDAO {
                 reservation.setId_chambre(resultat.getInt("id_chambre"));
                 reservation.setId_client(resultat.getInt("id_client"));
                 reservation.setNb_personne(resultat.getInt("nb_personne"));
-                reservation.setHeure_arrive(resultat.getDate("heure_arrive"));
-                reservation.setHeure_depart(resultat.getDate("heure_depart"));
+                reservation.setJour_arrive(resultat.getDate("jour_arrive"));
+                reservation.setJour_depart(resultat.getDate("jour_depart"));
                 reservations.add(reservation);
             }
             return reservations;
@@ -87,7 +87,7 @@ public class ReservationDAO {
     public ArrayList<Reservation> searchReservations(String searchTerm) {
         ArrayList<Reservation> reservations = new ArrayList<>();
         try {
-            PreparedStatement ps = Database.connexion.prepareStatement("SELECT * FROM reservation WHERE id_chambre LIKE ? OR id_client LIKE ? OR nb_personne LIKE ? OR heure_arrive LIKE ? OR heure_depart LIKE ?");
+            PreparedStatement ps = Database.connexion.prepareStatement("SELECT * FROM reservation WHERE id_chambre LIKE ? OR id_client LIKE ? OR nb_personne LIKE ? OR jour_arrive LIKE ? OR jour_depart LIKE ?");
             ps.setString(1, "%" + searchTerm + "%");
             ps.setString(2, "%" + searchTerm + "%");
             ps.setString(3, "%" + searchTerm + "%");
@@ -100,8 +100,8 @@ public class ReservationDAO {
                 reservation.setId_chambre(resultat.getInt("id_chambre"));
                 reservation.setId_client(resultat.getInt("id_client"));
                 reservation.setNb_personne(resultat.getInt("nb_personne"));
-                reservation.setHeure_arrive(resultat.getDate("heure_arrive"));
-                reservation.setHeure_depart(resultat.getDate("heure_depart"));
+                reservation.setJour_arrive(resultat.getDate("jour_arrive"));
+                reservation.setJour_depart(resultat.getDate("jour_depart"));
                 reservations.add(reservation);
             }
             return reservations;
@@ -121,8 +121,8 @@ public class ReservationDAO {
             reservation.setId_chambre(resultat.getInt("id_chambre"));
             reservation.setId_client(resultat.getInt("id_client"));
             reservation.setNb_personne(resultat.getInt("nb_personne"));
-            reservation.setHeure_arrive(resultat.getDate("heure_arrive"));
-            reservation.setHeure_depart(resultat.getDate("heure_depart"));
+            reservation.setJour_arrive(resultat.getDate("jour_arrive"));
+            reservation.setJour_depart(resultat.getDate("jour_depart"));
             return reservation;
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,8 +140,8 @@ public class ReservationDAO {
             reservation.setId_chambre(resultat.getInt("id_chambre"));
             reservation.setId_client(resultat.getInt("id_client"));
             reservation.setNb_personne(resultat.getInt("nb_personne"));
-            reservation.setHeure_arrive(resultat.getDate("heure_arrive"));
-            reservation.setHeure_depart(resultat.getDate("heure_depart"));
+            reservation.setJour_arrive(resultat.getDate("jour_arrive"));
+            reservation.setJour_depart(resultat.getDate("jour_depart"));
             return reservation;
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,24 +3,24 @@ package entites;
 import java.sql.Date;
 
 public class Reservation {
-    Date heure_arrive;
-    Date heure_depart;
+    int id;
+    Date jour_arrive;
+    Date jour_depart;
     int nb_personne;
     int id_client;
     int id_chambre;
-    int id;
 
-    public Reservation(Date heure_arrive, Date heure_depart, int nb_personne, int id_client, int id_chambre, int id) {
-        this.heure_arrive = heure_arrive;
-        this.heure_depart = heure_depart;
+    public Reservation(Date jour_arrive, Date jour_depart, int nb_personne, int id_client, int id_chambre, int id) {
+        this.jour_arrive = jour_arrive;
+        this.jour_depart = jour_depart;
         this.nb_personne = nb_personne;
         this.id_client = id_client;
         this.id_chambre = id_chambre;
         this.id = id;
     }
-    public Reservation(Date heure_arrive, Date heure_depart, int nb_personne, int id_client, int id_chambre) {
-        this.heure_arrive = heure_arrive;
-        this.heure_depart = heure_depart;
+    public Reservation(Date jour_arrive, Date jour_depart, int nb_personne, int id_client, int id_chambre) {
+        this.jour_arrive = jour_arrive;
+        this.jour_depart = jour_depart;
         this.nb_personne = nb_personne;
         this.id_client = id_client;
         this.id_chambre = id_chambre;
@@ -28,20 +28,28 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Date getHeure_arrive() {
-        return heure_arrive;
+    public int getId() {
+        return id;
     }
 
-    public void setHeure_arrive(Date heure_arrive) {
-        this.heure_arrive = heure_arrive;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Date getHeure_depart() {
-        return heure_depart;
+    public Date getJour_arrive() {
+        return jour_arrive;
     }
 
-    public void setHeure_depart(Date heure_depart) {
-        this.heure_depart = heure_depart;
+    public void setJour_arrive(Date jour_arrive) {
+        this.jour_arrive = jour_arrive;
+    }
+
+    public Date getJour_depart() {
+        return jour_depart;
+    }
+
+    public void setJour_depart(Date jour_depart) {
+        this.jour_depart = jour_depart;
     }
 
     public int getNb_personne() {
@@ -68,23 +76,15 @@ public class Reservation {
         this.id_chambre = id_chambre;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "Reservation{" +
-                "heure_arrive=" + heure_arrive +
-                ", heure_depart=" + heure_depart +
+                "id=" + id +
+                ", jour_arrive=" + jour_arrive +
+                ", jour_depart=" + jour_depart +
                 ", nb_personne=" + nb_personne +
                 ", id_client=" + id_client +
                 ", id_chambre=" + id_chambre +
-                ", id=" + id +
                 '}';
     }
 }
