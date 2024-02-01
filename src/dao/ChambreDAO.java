@@ -10,7 +10,7 @@ public class ChambreDAO {
     public static void save (Chambre chambre) {
         try {
             if (chambre.getId() != 0) {
-                PreparedStatement ps = Database.connexion.prepareStatement("UPDATE chambre SET numero = ?, superficie = ?, sdb = ?, tv = ?, balcon = ?, frigo = ?, baignoire = ?, insonorise = ?, prixN = ?, simple = ?, double = ?, id_hotel = ? WHERE id = ?");
+                PreparedStatement ps = Database.connexion.prepareStatement("UPDATE chambre SET numero = ?, superficie = ?, sdb = ?, tv = ?, balcon = ?, frigo = ?, baignoire = ?, insonorise = ?, prixN = ?, chambre_simple = ?, chambre_double = ?, id_hotel = ? WHERE id = ?");
                 ps.setInt(1, chambre.getChamberNumber());
                 ps.setInt(2, chambre.getChamberArea());
                 ps.setString(3, chambre.getBathroom());
@@ -27,7 +27,7 @@ public class ChambreDAO {
                 ps.executeUpdate();
                 System.out.println("Update Ok !");
             } else {
-                PreparedStatement ps = Database.connexion.prepareStatement("INSERT INTO chambre (numero, superficie, sdb, tv, balcon, frigo, baignoire, insonorise, prixN, simple, double, id_hotel) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+                PreparedStatement ps = Database.connexion.prepareStatement("INSERT INTO chambre (numero, superficie, sdb, tv, balcon, frigo, baignoire, insonorise, prixN, chambre_simple, chambre_double, id_hotel) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps.setInt(1, chambre.getChamberNumber());
                 ps.setInt(2, chambre.getChamberArea());
                 ps.setString(3, chambre.getBathroom());
@@ -65,8 +65,8 @@ public class ChambreDAO {
             chambre.setBathtub(resultat.getString("baignoire"));
             chambre.setSoundproof(resultat.getString("insonorise"));
             chambre.setPricePerNight(resultat.getDouble("prixN"));
-            chambre.setIsSimple(resultat.getString("simple"));
-            chambre.setisDouble(resultat.getString("double"));
+            chambre.setIsSimple(resultat.getString("chambre_simple"));
+            chambre.setisDouble(resultat.getString("chambre_double"));
             chambre.setId_hotel(resultat.getInt("id_hotel"));
             return chambre;
         } catch (Exception e) {
@@ -91,8 +91,8 @@ public class ChambreDAO {
                 chambre.setBathtub(resultat.getString("baignoire"));
                 chambre.setSoundproof(resultat.getString("insonorise"));
                 chambre.setPricePerNight(resultat.getDouble("prixN"));
-                chambre.setIsSimple(resultat.getString("simple"));
-                chambre.setisDouble(resultat.getString("double"));
+                chambre.setIsSimple(resultat.getString("chambre_simple"));
+                chambre.setisDouble(resultat.getString("chambre_double"));
                 chambre.setId_hotel(resultat.getInt("id_hotel"));
                 chambres.add(chambre);
             }
@@ -141,8 +141,8 @@ public class ChambreDAO {
                 chambre.setBathtub(resultat.getString("baignoire"));
                 chambre.setSoundproof(resultat.getString("insonorise"));
                 chambre.setPricePerNight(resultat.getDouble("prixN"));
-                chambre.setIsSimple(resultat.getString("simple"));
-                chambre.setisDouble(resultat.getString("double"));
+                chambre.setIsSimple(resultat.getString("chambre_simple"));
+                chambre.setisDouble(resultat.getString("chambre_double"));
                 chambre.setId_hotel(resultat.getInt("id_hotel"));
                 chambres.add(chambre);
             }
@@ -169,8 +169,8 @@ public class ChambreDAO {
             chambre.setBathtub(resultat.getString("baignoire"));
             chambre.setSoundproof(resultat.getString("insonorise"));
             chambre.setPricePerNight(resultat.getDouble("prixN"));
-            chambre.setIsSimple(resultat.getString("simple"));
-            chambre.setisDouble(resultat.getString("double"));
+            chambre.setIsSimple(resultat.getString("chambre_simple"));
+            chambre.setisDouble(resultat.getString("chambre_double"));
             chambre.setId_hotel(resultat.getInt("id_hotel"));
             return chambre;
         } catch (Exception e) {

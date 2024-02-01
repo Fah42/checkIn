@@ -1299,9 +1299,11 @@ public class Main {
                         simpleOrDouble = scanner.nextLine();
                     }
                     if ("oui".equalsIgnoreCase(simpleOrDouble)) {
-                        chambre.setIsSimple(simpleOrDouble);
+                        chambre.setIsSimple("oui");
+                        chambre.setisDouble("non");
                     } else {
-                        chambre.setisDouble(simpleOrDouble);
+                        chambre.setIsSimple("non");
+                        chambre.setisDouble("oui");
                     }
                     isInputValid = true;
                 } else {
@@ -1840,13 +1842,19 @@ public class Main {
             }
 
             while (true) {
-                System.out.println("Veuillez entrer la date d'arrivee au format YYYY-MM-DD : ");
+                System.out.println("Veuillez entrer la date d'arrivée au format YYYY-MM-DD : ");
                 jour_arrive = scanner.nextLine();
                 if (isDateFormatValid(jour_arrive)) {
                     LocalDate localDate = LocalDate.parse(jour_arrive);
-                    java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
-                    reservation.setJour_arrive(sqlDate);
-                    break;
+                    LocalDate today = LocalDate.now(); // obtenir la date actuelle
+
+                    if (!localDate.isBefore(today)) { // Vérifiez si la date d'arrivée n'est pas antérieure à aujourd'hui
+                        java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
+                        reservation.setJour_arrive(sqlDate);
+                        break;
+                    } else {
+                        System.out.println("La date d'arrivée ne peut pas être antérieure à la date actuelle. Veuillez choisir une date valide.");
+                    }
                 } else {
                     System.out.println("L'entrée n'est pas une date valide. Veuillez entrer une date au format YYYY-MM-DD.");
                 }
@@ -1880,11 +1888,11 @@ public class Main {
             reservation.setNbNight(nb_nuitsInt);
 
             while (true) {
-                System.out.println("Veuillez entrer le nombre d'etoile uniquement en valeur numerique : ");
+                System.out.println("Veuillez entrer le nombre de personne uniquement en valeur numerique : ");
                 if (scanner.hasNextInt()) {
                     nb_personne = scanner.nextInt();
                     if (nb_personne <= 0) {
-                        System.out.println("Veuillez entrer une valeur positive. Qui ne depasse pas 5");
+                        System.out.println("Veuillez entrer une valeur positive.");
                     } else {
                         scanner.nextLine();
                         reservation.setNb_personne(nb_personne);
@@ -1897,6 +1905,7 @@ public class Main {
             }
 
             reservationDAO.save(reservation);
+
             System.out.println("Voulez-vous ajouter une autre reservation ? (Oui/Non)");
             response = scanner.nextLine();
             while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
@@ -2107,7 +2116,7 @@ public class Main {
 
     /**
      * Affiche les détails de tous les paiements enregistrés. Pour chaque paiement,
-     * récupère et affiche les informations associées de la commande et du client correspondant.
+     * récupère et affiche les informations associées a la reservation et du client correspondant.
      * Utilise PaiementDAO pour obtenir tous les paiements, et CommandeDAO et ClientDAO pour
      * obtenir les détails supplémentaires nécessaires.
      **/
