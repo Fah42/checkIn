@@ -9,7 +9,7 @@ public class Reservation {
     int nb_personne;
     int id_client;
     int id_chambre;
-
+    int nbNight;
     public Reservation(Date jour_arrive, Date jour_depart, int nb_personne, int id_client, int id_chambre, int id) {
         this.jour_arrive = jour_arrive;
         this.jour_depart = jour_depart;
@@ -76,6 +76,14 @@ public class Reservation {
         this.id_chambre = id_chambre;
     }
 
+    public int getNbNight() {
+        return nbNight;
+    }
+
+    public void setNbNight(int nbNight) {
+        this.nbNight = nbNight;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -85,6 +93,7 @@ public class Reservation {
                 ", nb_personne=" + nb_personne +
                 ", id_client=" + id_client +
                 ", id_chambre=" + id_chambre +
+                ", nbNight=" + nbNight +
                 '}';
     }
 }

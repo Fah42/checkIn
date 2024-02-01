@@ -51,25 +51,25 @@ public class Main {
             } else if (userChoice == 15) {
                 searchHotel();
             } else if (userChoice == 16) {
-                displayRoom();
-            } else if (userChoice == 17) {
-                addRoom();
-            } else if (userChoice == 18) {
-                modifyRoom();
-            } else if (userChoice == 19) {
-                deleteRoom();
-            } else if (userChoice == 20) {
-                searchRoom();
-            } else if (userChoice == 21) {
                 displayReservation();
-            } else if (userChoice == 22) {
+            } else if (userChoice == 17) {
                 addReservation();
-            } else if (userChoice == 23) {
+            } else if (userChoice == 18) {
                 modifyReservation();
-            } else if (userChoice == 24) {
+            } else if (userChoice == 19) {
                 deleteReservation();
-            } else if (userChoice == 25) {
+            } else if (userChoice == 20) {
                 searchReservation();
+            } else if (userChoice == 21) {
+                displayRoom();
+            } else if (userChoice == 22) {
+                addRoom();
+            } else if (userChoice == 23) {
+                modifyRoom();
+            } else if (userChoice == 24) {
+                deleteRoom();
+            } else if (userChoice == 25) {
+                searchRoom();
             } else if (userChoice == 26) {
                 displayPaiement();
             } else if (userChoice == 27) {
@@ -79,7 +79,7 @@ public class Main {
             } else if (userChoice == 29) {
                 deletePaiement();
             } else if (userChoice == 30) {
-                searchReservation();
+                searchPaiement();
             }
         }
     }
@@ -102,11 +102,22 @@ public class Main {
         }
     }
 
-    public static Double alreadyPaid(int id_commande) {
-        return 0.0;
+    public static Double alreadyPaid(int id_reservation) {
+        ArrayList<Paiement> paiements = new ArrayList<>();
+        PaiementDAO paiementDAO = new PaiementDAO();
+        paiements = paiementDAO.getAll();
+        Double alreadyPaid = 0.0;
+
+        for (Paiement paiement : paiements) {
+            if (paiement.getId_reservation() == id_reservation) {
+                alreadyPaid += paiement.getMontant();
+            }
+        }
+
+        return alreadyPaid;
     }
 
-    public static boolean isStringValid(@org.jetbrains.annotations.NotNull String stringToCheck) {
+    public static boolean isStringValid(String stringToCheck) {
         return stringToCheck.length() <= 50 && !stringToCheck.isEmpty();
     }
 
@@ -269,7 +280,6 @@ public class Main {
                 scanner.nextLine();
                 societe = societeDAO.getById(userChoice);
                 if (societe != null) {
-                    hotel = hotelDAO.getByIdCompany(userChoice);
                     System.out.println("Si La societe dispose d'un ou plusieurs hotels qui seront aussi TOTALEMENT \uD83D\uDCA5DETRUIT\uD83D\uDCA5, t'es sur de toi (repondre par oui ou non)?");
                     areYouSure = scanner.nextLine();
                     while (!"Oui".equalsIgnoreCase(areYouSure) && !"Non".equalsIgnoreCase(areYouSure)) {
@@ -277,8 +287,8 @@ public class Main {
                         areYouSure = scanner.nextLine();
                     }
                     if ("Oui".equalsIgnoreCase(areYouSure)) {
-                        if (hotel != null) {
-                            chambreDAO.deleteByIdHotel(hotel.getId());
+                        if (hotelDAO.getByIdCompany(userChoice) != null) {
+                            chambreDAO.deleteByIdHotel(hotelDAO.getByIdCompany(userChoice).getId());
                             hotelDAO.deleteByIdCompany(userChoice);
                         }
                         societeDAO.deleteById(userChoice);
@@ -491,7 +501,7 @@ public class Main {
             System.out.println("------ Modifier un Client ------");
             while (true) {
                 displayClient();
-                System.out.println("Veuillez entrer l'id de la societe à modifier, uniquement en valeur numérique : ");
+                System.out.println("Veuillez entrer l'id du client à modifier, uniquement en valeur numérique : ");
                 if (scanner.hasNextInt()) {
                     userChoice = scanner.nextInt();
                     scanner.nextLine();
@@ -785,14 +795,14 @@ public class Main {
             }
 
             while (!isInputValid) {
-                System.out.println("Veuillez entrer le ville du hotel : ");
+                System.out.println("Veuillez entrer la ville ou se situe l'hotel : ");
                 city = scanner.nextLine();
 
                 if (isStringValid(city)) {
                     hotel.setCity(city);
                     isInputValid = true;
                 } else {
-                    System.out.println("La ville entré n'est pas valide. Veuillez réessayer.");
+                    System.out.println("La ville entrée n'est pas valide. Veuillez réessayer.");
                 }
             }
             isInputValid = false;
@@ -805,7 +815,7 @@ public class Main {
                     hotel.setAdress(desc);
                     isInputValid = true;
                 } else {
-                    System.out.println("La description entré n'est pas valide. Veuillez réessayer.");
+                    System.out.println("La description entrée n'est pas valide. Veuillez réessayer.");
                 }
             }
             isInputValid = false;
@@ -859,7 +869,7 @@ public class Main {
             }
 
             while (!isInputValid) {
-                System.out.println("l'hotel dispose t'il d'un piscine ? : ");
+                System.out.println("l'hotel dispose t'il d'une piscine ? : ");
                 pool = scanner.nextLine();
                 if ("oui".equalsIgnoreCase(pool) || "non".equalsIgnoreCase(pool)) {
                     hotel.setPool(pool);
@@ -1023,7 +1033,7 @@ public class Main {
                 desc = scanner.nextLine();
 
                 if (isStringValid(desc)) {
-                    hotel.setAdress(desc);
+                    hotel.setDesc(desc);
                     isInputValid = true;
                 } else {
                     System.out.println("La description entré n'est pas valide. Veuillez réessayer.");
@@ -1035,7 +1045,7 @@ public class Main {
                 System.out.println("l'hotel dispose t'il d'un parking ? : ");
                 parking = scanner.nextLine();
                 if ("oui".equalsIgnoreCase(parking) || "non".equalsIgnoreCase(parking)) {
-                    hotel.setWifi(parking);
+                    hotel.setParking(parking);
                     isInputValid = true;
                 } else {
                     System.out.println("Veuillez repondre par oui ou par non uniquement. Veuillez réessayer.");
@@ -1073,7 +1083,7 @@ public class Main {
                 try {
                     checkOutTime = LocalTime.parse(checkOut, timeFormatter);
                     java.sql.Time checkOutTimeSql = java.sql.Time.valueOf(checkOutTime);
-                    hotel.setCheckIn(checkOutTimeSql);
+                    hotel.setCheckOut(checkOutTimeSql);
                 } catch (DateTimeParseException e) {
                     System.out.println("Heure invalide, veuillez réessayer.");
                 }
@@ -1228,9 +1238,9 @@ public class Main {
 
         do {
             System.out.println("------ Ajout d'une chambre ------");
-            displayRoom();
+            displayHotel();
             while (true) {
-                System.out.println("Veuillez choisir à quelle hotel appartiendra la chambre en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                System.out.println("Veuillez choisir à quel hotel appartiendra la chambre en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
                 if (scanner.hasNextInt()) {
                     id_hotel = scanner.nextInt();
                     scanner.nextLine();
@@ -1283,7 +1293,7 @@ public class Main {
                 System.out.println("Est-ce une chambre simple ? (repondre par oui ou non) : ");
                 simpleOrDouble = scanner.nextLine();
                 if (isStringValid(simpleOrDouble)) {
-                    while (!"oui".equalsIgnoreCase(simpleOrDouble) || !"non".equalsIgnoreCase(simpleOrDouble)) {
+                    while (!"oui".equalsIgnoreCase(simpleOrDouble) && !"non".equalsIgnoreCase(simpleOrDouble)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("Est-ce une chambre simple ? : ");
                         simpleOrDouble = scanner.nextLine();
@@ -1304,7 +1314,7 @@ public class Main {
                 System.out.println("La chambre dispose t'elle d'une salle de bain ? (repondre par oui ou non) : ");
                 bathroom = scanner.nextLine();
                 if (isStringValid(bathroom)) {
-                    while (!"oui".equalsIgnoreCase(bathroom) || !"non".equalsIgnoreCase(bathroom)) {
+                    while (!"oui".equalsIgnoreCase(bathroom) && !"non".equalsIgnoreCase(bathroom)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une salle de bain ? : ");
                         bathroom = scanner.nextLine();
@@ -1313,7 +1323,7 @@ public class Main {
                         chambre.setBathroom(bathroom);
                         System.out.println("La salle de bain dispose t'elle d'une baignoire ?");
                         bathtub = scanner.nextLine();
-                        while (!"oui".equalsIgnoreCase(bathtub) || !"non".equalsIgnoreCase(bathtub)) {
+                        while (!"oui".equalsIgnoreCase(bathtub) && !"non".equalsIgnoreCase(bathtub)) {
                             System.out.println("Veuillez repondre uniquement par Oui ou Non");
                             System.out.println("La chambre dispose t'elle d'une baignoire ? : ");
                             bathtub = scanner.nextLine();
@@ -1336,7 +1346,7 @@ public class Main {
                 System.out.println("La chambre dispose t'elle d'une TV ? (repondre par oui ou non) : ");
                 tv = scanner.nextLine();
                 if (isStringValid(tv)) {
-                    while (!"oui".equalsIgnoreCase(tv) || !"non".equalsIgnoreCase(tv)) {
+                    while (!"oui".equalsIgnoreCase(tv) && !"non".equalsIgnoreCase(tv)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une TV ? : ");
                         tv = scanner.nextLine();
@@ -1357,7 +1367,7 @@ public class Main {
                 System.out.println("La chambre dispose t'elle d'un balcon ? (repondre par oui ou non) : ");
                 balcony = scanner.nextLine();
                 if (isStringValid(balcony)) {
-                    while (!"oui".equalsIgnoreCase(balcony) || !"non".equalsIgnoreCase(balcony)) {
+                    while (!"oui".equalsIgnoreCase(balcony) && !"non".equalsIgnoreCase(balcony)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'un balcon ? : ");
                         balcony = scanner.nextLine();
@@ -1378,7 +1388,7 @@ public class Main {
                 System.out.println("La chambre dispose t'elle d'un frigo ? (repondre par oui ou non) : ");
                 fridge = scanner.nextLine();
                 if (isStringValid(fridge)) {
-                    while (!"oui".equalsIgnoreCase(fridge) || !"non".equalsIgnoreCase(fridge)) {
+                    while (!"oui".equalsIgnoreCase(fridge) && !"non".equalsIgnoreCase(fridge)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'un frigo ? : ");
                         fridge = scanner.nextLine();
@@ -1399,7 +1409,7 @@ public class Main {
                 System.out.println("La chambre dispose t'elle d'une insonorisation ? (repondre par oui ou non) : ");
                 soundproof = scanner.nextLine();
                 if (isStringValid(soundproof)) {
-                    while (!"oui".equalsIgnoreCase(soundproof) || !"non".equalsIgnoreCase(soundproof)) {
+                    while (!"oui".equalsIgnoreCase(soundproof) && !"non".equalsIgnoreCase(soundproof)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une insonorisation ? : ");
                         soundproof = scanner.nextLine();
@@ -1787,6 +1797,8 @@ public class Main {
         int id_chambre;
         int id_client;
         int nb_personne;
+        long nb_nuit;
+        int nb_nuitsInt;
         String jour_arrive;
         String jour_depart;
         String response;
@@ -1857,6 +1869,15 @@ public class Main {
                     System.out.println("L'entrée n'est pas une date valide. Veuillez entrer une date au format YYYY-MM-DD.");
                 }
             }
+
+            LocalDate localDateArrivee = reservation.getJour_arrive().toLocalDate();
+            LocalDate localDateDepart = reservation.getJour_depart().toLocalDate();
+            // Calculer le nombre de nuits
+            nb_nuit = java.time.temporal.ChronoUnit.DAYS.between(localDateArrivee, localDateDepart);
+            // Afficher le nombre de nuits ou le stocker selon vos besoins
+            System.out.println("Nombre de nuits : " + nb_nuit);
+            nb_nuitsInt = (int) nb_nuit;
+            reservation.setNbNight(nb_nuitsInt);
 
             while (true) {
                 System.out.println("Veuillez entrer le nombre d'etoile uniquement en valeur numerique : ");
@@ -2091,7 +2112,13 @@ public class Main {
      * obtenir les détails supplémentaires nécessaires.
      **/
     public static void displayPaiement() {
+        ArrayList<Paiement> paiements = new ArrayList<>();
+        paiements = new PaiementDAO().getAll();
 
+        System.out.print("------ Affichage des Paiements ------\n");
+        for (Paiement paiement : paiements) {
+            System.out.println(paiement);
+        }
     }
 
     /**
@@ -2101,7 +2128,106 @@ public class Main {
      * est validée à chaque étape. La méthode permet l'ajout de paiements multiples par une boucle do while.
      **/
     public static void addPaiement() {
+        ReservationDAO reservationDAO = new ReservationDAO();
+        ChambreDAO chambreDAO = new ChambreDAO();
+        Paiement paiement = new Paiement();
+        String response;
+        String methode;
+        boolean isLeftToPay;
+        boolean isInputValid = false;
+        double montant;
+        double pricePerNight;
+        double alreadyPaid;
+        double total;
+        int id_reservation;
 
+        do {
+            isLeftToPay = true;
+            System.out.println("------ Paiement ------");
+            displayReservation();
+            while (true) {
+                System.out.println("Veuillez choisir a quel reservation appartient le paiement en selectionnant l'id correspond en utilisant uniquement des caracteres numerique : ");
+                if (scanner.hasNextInt()){
+                    id_reservation = scanner.nextInt();
+                    scanner.nextLine();
+                    if(reservationDAO.getById(id_reservation) != null) {
+                        paiement.setId_reservation(id_reservation);
+                        break;
+                    } else {
+                        System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                    }
+                } else {
+                    System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                    scanner.next();
+                }
+            }
+            pricePerNight = chambreDAO.getById(reservationDAO.getByIdChambre(id_reservation).getId()).getPricePerNight();
+            alreadyPaid = alreadyPaid(id_reservation);
+            total = pricePerNight * reservationDAO.getByIdChambre(id_reservation).getNbNight();
+
+            if (alreadyPaid == total){
+                System.out.println("La commande est deja regle.");
+                isLeftToPay = false;
+            }
+
+            if (isLeftToPay) {
+                while(true) {
+                    System.out.println("Veuillez entrer le paiement uniquement en valeur numerique : ");
+                    if (scanner.hasNextDouble()) {
+                        montant = scanner.nextDouble();
+                        scanner.nextLine();
+                        while (montant <= 0) {
+                            System.out.println("Veuillez entrer une valeur positive svp : ");
+                            montant = scanner.nextDouble();
+                            scanner.nextLine();
+                        }
+                        if (alreadyPaid + montant > total){
+                            System.out.print("Vous avez entre une somme trop eleve qui depasse le prix total de la commande.");
+                        } else {
+                            paiement.setMontant(montant);
+                            break;
+                        }
+                    } else {
+                        System.out.print("La somme entré n'est pas valide. Veuillez réessayer.");
+                        scanner.next();
+                    }
+                }
+
+                while (true) {
+                    System.out.println("Veuillez entrer la date du paiement au format YYYY-MM-DD : ");
+                    String date = scanner.nextLine();
+                    if (isDateFormatValid(date)) {
+                        LocalDate localDate = LocalDate.parse(date);
+                        java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
+                        paiement.setDateP(sqlDate);
+                        break;
+                    } else {
+                        System.out.println("L'entrée n'est pas une date valide. Veuillez entrer une date au format YYYY-MM-DD.");
+                    }
+                }
+
+                while (!isInputValid) {
+                    System.out.println("Quelle est la methode de paiement ? (Carte, Espece, Cheque ?) : ");
+                    methode = scanner.nextLine();
+                    if (isStringValid(methode)) {
+                        while (!"carte".equalsIgnoreCase(methode) || !"espece".equalsIgnoreCase(methode) || !"cheque".equalsIgnoreCase(methode)) {
+                            System.out.println("Veuillez repondre uniquement par Carte, Espece ou Cheque.");
+                            methode = scanner.nextLine();
+                        }
+                        isInputValid = true;
+                    } else {
+                        System.out.println("Nombre de characters trop eleve.");
+                    }
+                }
+            PaiementDAO.save(paiement);
+            }
+            System.out.println("Voulez-vous ajouter un autre paiement ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
     /**
@@ -2112,7 +2238,123 @@ public class Main {
      * dans une session grâce à une boucle do while.
      **/
     public static void modifyPaiement() {
+        ReservationDAO reservationDAO = new ReservationDAO();
+        ChambreDAO chambreDAO = new ChambreDAO();
+        PaiementDAO paiementDAO = new PaiementDAO();
+        Paiement paiement = new Paiement();
+        String response;
+        String methode;
+        boolean isLeftToPay = true;
+        boolean isInputValid = false;
+        double montant;
+        double pricePerNight;
+        double alreadyPaid;
+        double total;
+        int id_reservation;
+        int userChoice;
 
+        do {
+            System.out.println("------ Modifer Paiement ------");
+            while (true) {
+                displayPaiement();
+                System.out.println("Veuillez choisir quel paiement vous souhaitez modifier en sélectionnant l'id correspondant, en utilisant uniquement des caractères numériques : ");
+                if (scanner.hasNextInt()) {
+                    userChoice = scanner.nextInt();
+                    scanner.nextLine();
+                    if (paiementDAO.getById(userChoice) != null) {
+                        paiement.setId(userChoice);
+                        break;
+                    }
+                    System.out.println("ID inexistant.\n");
+                } else {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.\n");
+                    scanner.next();
+                }
+            }
+
+            while (true) {
+                System.out.println("Veuillez choisir a quel reservation appartient le paiement en selectionnant l'id correspond en utilisant uniquement des caracteres numerique : ");
+                if (scanner.hasNextInt()){
+                    id_reservation = scanner.nextInt();
+                    scanner.nextLine();
+                    if(reservationDAO.getById(id_reservation) != null) {
+                        paiement.setId_reservation(id_reservation);
+                        break;
+                    } else {
+                        System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                    }
+                } else {
+                    System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                    scanner.next();
+                }
+            }
+            pricePerNight = chambreDAO.getById(reservationDAO.getByIdChambre(id_reservation).getId()).getPricePerNight();
+            alreadyPaid = alreadyPaid(id_reservation);
+            total = pricePerNight * reservationDAO.getByIdChambre(id_reservation).getNbNight();
+
+            if (alreadyPaid == total){
+                System.out.println("La commande est deja regle.");
+                isLeftToPay = false;
+            }
+
+            if (isLeftToPay) {
+                while(true) {
+                    System.out.println("Veuillez entrer le paiement uniquement en valeur numerique : ");
+                    if (scanner.hasNextDouble()) {
+                        montant = scanner.nextDouble();
+                        scanner.nextLine();
+                        while (montant <= 0) {
+                            System.out.println("Veuillez entrer une valeur positive svp : ");
+                            montant = scanner.nextDouble();
+                            scanner.nextLine();
+                        }
+                        if (alreadyPaid + montant > total){
+                            System.out.print("Vous avez entre une somme trop eleve qui depasse le prix total de la commande.");
+                        } else {
+                            paiement.setMontant(montant);
+                            break;
+                        }
+                    } else {
+                        System.out.print("La somme entré n'est pas valide. Veuillez réessayer.");
+                        scanner.next();
+                    }
+                }
+
+                while (true) {
+                    System.out.println("Veuillez entrer la date du paiement au format YYYY-MM-DD : ");
+                    String date = scanner.nextLine();
+                    if (isDateFormatValid(date)) {
+                        LocalDate localDate = LocalDate.parse(date);
+                        java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
+                        paiement.setDateP(sqlDate);
+                        break;
+                    } else {
+                        System.out.println("L'entrée n'est pas une date valide. Veuillez entrer une date au format YYYY-MM-DD.");
+                    }
+                }
+
+                while (!isInputValid) {
+                    System.out.println("Quelle est la methode de paiement ? (Carte, Espece, Cheque ?) : ");
+                    methode = scanner.nextLine();
+                    if (isStringValid(methode)) {
+                        while (!"carte".equalsIgnoreCase(methode) || !"espece".equalsIgnoreCase(methode) || !"cheque".equalsIgnoreCase(methode)) {
+                            System.out.println("Veuillez repondre uniquement par Carte, Espece ou Cheque.");
+                            methode = scanner.nextLine();
+                        }
+                        isInputValid = true;
+                    } else {
+                        System.out.println("Nombre de characters trop eleve.");
+                    }
+                }
+                PaiementDAO.save(paiement);
+            }
+            System.out.println("Voulez-vous ajouter un autre paiement ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
     /**
@@ -2121,10 +2363,76 @@ public class Main {
      * Offre la possibilité de supprimer plusieurs paiements dans une même session grâce à une boucle do while.
      **/
     public static void deletePaiement() {
+        PaiementDAO paiementDAO = new PaiementDAO();
+        Paiement paiement = new Paiement();
+        String response;
+        String areYouSure;
+        int userChoice;
 
+        do {
+            System.out.println("Suppression d'une reservation");
+            displayPaiement();
+            System.out.println("Veuillez entrer l'id du paiement à supprimer, uniquement en valeur numérique : ");
+            if (scanner.hasNextInt()) {
+                userChoice = scanner.nextInt();
+                scanner.nextLine();
+                paiement = paiementDAO.getById(userChoice);
+                if (paiement != null) {
+                    System.out.println("la reservation sera TOTALEMENT \uD83D\uDCA5DETRUITE\uD83D\uDCA5 ainsi que les paiements lie a cette reservation, t'es sur de toi (repondre par oui ou non)?");
+                    areYouSure = scanner.nextLine();
+                    while (!"Oui".equalsIgnoreCase(areYouSure) && !"Non".equalsIgnoreCase(areYouSure)) {
+                        System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                        areYouSure = scanner.nextLine();
+                    }
+                    if ("Oui".equalsIgnoreCase(areYouSure)) {
+                        paiementDAO.deleteById(userChoice);
+                    } else {
+                        System.out.println("Suppression annulee");
+                    }
+                } else {
+                    System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
+                }
+            } else {
+                System.out.println("L'entrée n'est pas un nombre valide. Veuillez entrer un nombre entier.");
+                scanner.nextLine();
+            }
+
+            System.out.println("Voulez-vous supprimer une autre reservation ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
     }
 
-    public static void searchPaiement() {}
+    public static void searchPaiement() {
+        PaiementDAO paiementDAO = new PaiementDAO();
+        ArrayList<Paiement> searchResults = new ArrayList<>();
+        String search;
+        String response;
+
+        do {
+            System.out.println("------ Recherche d'une reservation ------");
+            System.out.println("Veuillez entrer le terme de la recherche ");
+            search = scanner.nextLine();
+            searchResults = paiementDAO.searchPaiements(search);
+            if (searchResults != null) {
+                System.out.println("Resultat de la recherche : ");
+                for (Paiement paiement : searchResults) {
+                    System.out.println(paiement);
+                }
+            } else {
+                System.out.println("Aucun resultat trouve pour : " + search);
+            }
+            System.out.println("Voulez-vous rechercher une autre reservation ? (Oui/Non)");
+            response = scanner.nextLine();
+            while (!"Oui".equalsIgnoreCase(response) && !"Non".equalsIgnoreCase(response)) {
+                System.out.println("Veuillez repondre uniquement par (Oui/Non).");
+                response = scanner.nextLine();
+            }
+        } while ("Oui".equalsIgnoreCase(response));
+    }
     public static int menu() {
         int userChoice;
         do {
@@ -2145,19 +2453,20 @@ public class Main {
             System.out.println("14- Supprimer un Hotel");
             System.out.println("15- Rechercher un Hotel");
             System.out.println("16- Liste des Reservations");
-            System.out.println("17- ajouter une Reservation");
+            System.out.println("17- Ajouter une Reservation");
             System.out.println("18- Modifier une Reservation");
-            System.out.println("18- Supprimer une Reservation");
-            System.out.println("19- Rechercher une Reservation");
-            System.out.println("20- Ajouter une chambre");
-            System.out.println("21- Modifier une chambre");
-            System.out.println("22- Supprimer une chambre");
-            System.out.println("23- Rechercher une chambre");
-            System.out.println("24- Liste des Paiements");
-            System.out.println("25- Effectuer un Paiement");
-            System.out.println("26- Modifier un Paiement");
-            System.out.println("27- Supprimer un Paiement");
-            System.out.println("28- Rechercher un Paiement");
+            System.out.println("19- Supprimer une Reservation");
+            System.out.println("20- Rechercher une Reservation");
+            System.out.println("21- Liste des chambres");
+            System.out.println("22- Ajouter une chambre");
+            System.out.println("23- Modifier une chambre");
+            System.out.println("24- Supprimer une chambre");
+            System.out.println("25- Rechercher une chambre");
+            System.out.println("26- Liste des Paiements");
+            System.out.println("27- Effectuer un Paiement");
+            System.out.println("28- Modifier un Paiement");
+            System.out.println("29- Supprimer un Paiement");
+            System.out.println("30- Rechercher un Paiement");
             System.out.println("0- Quitter");
             while (!scanner.hasNextInt()) {
                 System.out.println("Veuillez entrer un nombre valide.");

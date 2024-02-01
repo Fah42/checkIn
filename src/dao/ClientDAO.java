@@ -64,7 +64,6 @@ public class ClientDAO {
             u.setCountry(resultat.getString("pays"));
             return u;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -90,7 +89,6 @@ public class ClientDAO {
             }
             return clients;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -102,7 +100,7 @@ public class ClientDAO {
             ps.executeUpdate();
             System.out.println("User Deleted");
         } catch (Exception e) {
-            e.printStackTrace();
+            return ;
         }
     }
 
@@ -135,7 +133,6 @@ public class ClientDAO {
             }
             return clients;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

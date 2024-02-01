@@ -181,7 +181,6 @@ public class HotelDAO {
             hotel.setId_societe(resultat.getInt("id_societe"));
             return hotel;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -192,7 +191,7 @@ public class HotelDAO {
             ps.executeUpdate();
             System.out.println("Hotel Deleted");
         } catch (Exception e) {
-            e.printStackTrace();
+            return ;
         }
     }
 }
