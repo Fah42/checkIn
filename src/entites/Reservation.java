@@ -86,14 +86,10 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{" +
-                "id=" + id +
-                ", jour_arrive=" + jour_arrive +
-                ", jour_depart=" + jour_depart +
-                ", nb_personne=" + nb_personne +
-                ", id_client=" + id_client +
-                ", id_chambre=" + id_chambre +
-                ", nbNight=" + nbNight +
-                '}';
+        return "Reservation numero : [ " + id + " ] " +
+                "jour_arrive : [ " + jour_arrive + " ] " +
+                "jour_depart : [ " + jour_depart + " ] "+
+                "nb_personne : [ " + nb_personne + " ] " +
+                "nombre de nuit : [ " + nbNight + " ] ";
     }
 }

@@ -1783,11 +1783,20 @@ public class Main {
 
     public static void displayReservation() {
         ArrayList<Reservation> reservations = new ArrayList<>();
-        reservations = new ReservationDAO().getAll();
+        ClientDAO clientDAO = new ClientDAO();
+        ChambreDAO chambreDAO = new ChambreDAO();
+        HotelDAO hotelDAO = new HotelDAO();
+        Client client = new Client();
+        Chambre chambre = new Chambre();
+        Hotel hotel = new Hotel();
 
+        reservations = new ReservationDAO().getAll();
         System.out.print("------ Affichage des Resevations ------\n");
         for (Reservation reservation : reservations) {
-            System.out.println(reservation);
+            client = clientDAO.getById(reservation.getId_client());
+            chambre = chambreDAO.getById(reservation.getId_chambre());
+            hotel = hotelDAO.getById(chambre.getId_hotel());
+            System.out.println("Au nom de : " + client.getNom() + " "+ client.getPrenom() + " ,Chambre numero : " + chambre.getChamberNumber() + ", dans l'hotel : " + hotel.getNom() + ", Pour " + reservation.getNbNight() + " nuits, pour le prix par nuit de : " + chambre.getPricePerNight() + ", au prix total de : " + reservation.getNbNight() + chambre.getPricePerNight() + " euros");
         }
     }
 
