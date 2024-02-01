@@ -28,7 +28,7 @@ public class PaiementDAO {
                 System.out.println("Insert Ok !");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
     public Paiement getById(int id) {
@@ -45,7 +45,6 @@ public class PaiementDAO {
             paiement.setId_reservation(resultat.getInt("id_reservation"));
             return paiement;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -65,7 +64,6 @@ public class PaiementDAO {
             }
             return paiements;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -76,7 +74,7 @@ public class PaiementDAO {
             ps.executeUpdate();
             System.out.println("Paiement Deleted");
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
 
@@ -99,7 +97,6 @@ public class PaiementDAO {
             }
             return paiements;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -117,7 +114,6 @@ public class PaiementDAO {
             paiement.setId_reservation(resultat.getInt("id_reservation"));
             return paiement;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -128,7 +124,7 @@ public class PaiementDAO {
             ps.executeUpdate();
             System.out.println("Paiement Deleted");
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
 }

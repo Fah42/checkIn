@@ -46,7 +46,7 @@ public class HotelDAO {
             System.out.println("Insert Ok !");
         }
     } catch (Exception e) {
-        e.printStackTrace();
+        return;
         }
     }
     public Hotel getById(int id) {
@@ -73,7 +73,6 @@ public class HotelDAO {
             hotel.setId_societe(resultat.getInt("id_societe"));
             return hotel;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -102,7 +101,6 @@ public class HotelDAO {
             }
             return hotels;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

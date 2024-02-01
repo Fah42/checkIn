@@ -44,7 +44,7 @@ public class ChambreDAO {
                 System.out.println("Insert Ok !");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
     public Chambre getById(int id) {
@@ -70,7 +70,6 @@ public class ChambreDAO {
             chambre.setId_hotel(resultat.getInt("id_hotel"));
             return chambre;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -98,7 +97,6 @@ public class ChambreDAO {
             }
             return chambres;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -174,7 +172,6 @@ public class ChambreDAO {
             chambre.setId_hotel(resultat.getInt("id_hotel"));
             return chambre;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

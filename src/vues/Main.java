@@ -1789,6 +1789,7 @@ public class Main {
         Client client = new Client();
         Chambre chambre = new Chambre();
         Hotel hotel = new Hotel();
+        Double total;
 
         reservations = new ReservationDAO().getAll();
         System.out.print("------ Affichage des Resevations ------\n");
@@ -1796,7 +1797,8 @@ public class Main {
             client = clientDAO.getById(reservation.getId_client());
             chambre = chambreDAO.getById(reservation.getId_chambre());
             hotel = hotelDAO.getById(chambre.getId_hotel());
-            System.out.println("Au nom de : " + client.getNom() + " "+ client.getPrenom() + " ,Chambre numero : " + chambre.getChamberNumber() + ", dans l'hotel : " + hotel.getNom() + ", Pour " + reservation.getNbNight() + " nuits, pour le prix par nuit de : " + chambre.getPricePerNight() + ", au prix total de : " + reservation.getNbNight() + chambre.getPricePerNight() + " euros");
+            total = reservation.getNbNight() * chambre.getPricePerNight();
+            System.out.println("Reservation numero : " + reservation.getId() + " ,au nom de : " + client.getNom() + " "+ client.getPrenom() + " ,Chambre numero : " + chambre.getChamberNumber() + ", dans l'hotel : " + hotel.getNom() + ", Pour " + reservation.getNbNight() + " nuits, pour le prix par nuit de : " + chambre.getPricePerNight() + ", au prix total de : " + total + " euros");
         }
     }
 
@@ -2131,11 +2133,27 @@ public class Main {
      **/
     public static void displayPaiement() {
         ArrayList<Paiement> paiements = new ArrayList<>();
-        paiements = new PaiementDAO().getAll();
+        ReservationDAO reservationDAO = new ReservationDAO();
+        ChambreDAO chambreDAO = new ChambreDAO();
+        ClientDAO clientDAO = new ClientDAO();
+        HotelDAO hotelDAO = new HotelDAO();
+        Reservation reservation = new Reservation();
+        Chambre chambre = new Chambre();
+        Client client = new Client();
+        Hotel hotel = new Hotel();
+        double total;
+        double resteACharge;
 
+        paiements = new PaiementDAO().getAll();
         System.out.print("------ Affichage des Paiements ------\n");
         for (Paiement paiement : paiements) {
-            System.out.println(paiement);
+            reservation = reservationDAO.getById(paiement.getId_reservation());
+            client = clientDAO.getById(reservation.getId_client());
+            chambre = chambreDAO.getById(reservation.getId_chambre());
+            hotel = hotelDAO.getById(chambre.getId_hotel());
+            total = chambre.getPricePerNight() * reservation.getNbNight();
+            resteACharge = total - alreadyPaid(reservation.getId());
+            System.out.println(" Le " + paiement.getDateP() + ", " + client.getNom() + " " + client.getPrenom() + " a paye la somme de " + paiement.getMontant() + " sur un total de " + total + " par " + paiement.getMethode() + " pour la chambre numero :" + chambre.getChamberNumber() + " de l'hotel : " + hotel.getNom() + " reste a charge : " + resteACharge);
         }
     }
 
@@ -2148,6 +2166,8 @@ public class Main {
     public static void addPaiement() {
         ReservationDAO reservationDAO = new ReservationDAO();
         ChambreDAO chambreDAO = new ChambreDAO();
+        Chambre chambre = new Chambre();
+        Reservation reservation = new Reservation();
         Paiement paiement = new Paiement();
         String response;
         String methode;
@@ -2158,6 +2178,7 @@ public class Main {
         double alreadyPaid;
         double total;
         int id_reservation;
+        int nbNight;
 
         do {
             isLeftToPay = true;
@@ -2168,7 +2189,9 @@ public class Main {
                 if (scanner.hasNextInt()){
                     id_reservation = scanner.nextInt();
                     scanner.nextLine();
-                    if(reservationDAO.getById(id_reservation) != null) {
+                    reservation = reservationDAO.getById(id_reservation);
+                    if(reservation != null) {
+                        chambre = chambreDAO.getById(reservation.getId_chambre());
                         paiement.setId_reservation(id_reservation);
                         break;
                     } else {
@@ -2179,9 +2202,11 @@ public class Main {
                     scanner.next();
                 }
             }
-            pricePerNight = chambreDAO.getById(reservationDAO.getByIdChambre(id_reservation).getId()).getPricePerNight();
+
+            pricePerNight = chambre.getPricePerNight();
+            nbNight = reservation.getNbNight();
             alreadyPaid = alreadyPaid(id_reservation);
-            total = pricePerNight * reservationDAO.getByIdChambre(id_reservation).getNbNight();
+            total = pricePerNight * nbNight;
 
             if (alreadyPaid == total){
                 System.out.println("La commande est deja regle.");
@@ -2200,7 +2225,7 @@ public class Main {
                             scanner.nextLine();
                         }
                         if (alreadyPaid + montant > total){
-                            System.out.print("Vous avez entre une somme trop eleve qui depasse le prix total de la commande.");
+                            System.out.print("Vous avez entre une somme trop eleve qui depasse le prix total("+total+") de la commande. Somme deja paye : " + alreadyPaid);
                         } else {
                             paiement.setMontant(montant);
                             break;
@@ -2228,10 +2253,11 @@ public class Main {
                     System.out.println("Quelle est la methode de paiement ? (Carte, Espece, Cheque ?) : ");
                     methode = scanner.nextLine();
                     if (isStringValid(methode)) {
-                        while (!"carte".equalsIgnoreCase(methode) || !"espece".equalsIgnoreCase(methode) || !"cheque".equalsIgnoreCase(methode)) {
+                        while (!"carte".equalsIgnoreCase(methode) && !"espece".equalsIgnoreCase(methode) && !"cheque".equalsIgnoreCase(methode)) {
                             System.out.println("Veuillez repondre uniquement par Carte, Espece ou Cheque.");
                             methode = scanner.nextLine();
                         }
+                        paiement.setMethode(methode);
                         isInputValid = true;
                     } else {
                         System.out.println("Nombre de characters trop eleve.");

@@ -28,7 +28,6 @@ public class SocieteDAO {
                 System.out.println("Insert Ok !");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return;
         }
     }
@@ -47,7 +46,6 @@ public class SocieteDAO {
             }
             return societes;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -96,7 +94,6 @@ public class SocieteDAO {
             }
             return societes;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

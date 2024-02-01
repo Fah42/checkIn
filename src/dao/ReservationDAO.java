@@ -33,7 +33,7 @@ public class ReservationDAO {
                 System.out.println("Insert Ok !");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
     public Reservation getById(int id) {
@@ -52,7 +52,6 @@ public class ReservationDAO {
             reservation.setNbNight(resultat.getInt("nombre_de_nuit"));
             return reservation;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -74,7 +73,6 @@ public class ReservationDAO {
             }
             return reservations;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -85,7 +83,7 @@ public class ReservationDAO {
             ps.executeUpdate();
             System.out.println("Reservation Deleted");
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
     public ArrayList<Reservation> searchReservations(String searchTerm) {
@@ -111,7 +109,6 @@ public class ReservationDAO {
             }
             return reservations;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -131,7 +128,6 @@ public class ReservationDAO {
             reservation.setNbNight(resultat.getInt("nombre_de_nuit"));
             return reservation;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -151,7 +147,6 @@ public class ReservationDAO {
             reservation.setNbNight(resultat.getInt("nombre_de_nuit"));
             return reservation;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -162,7 +157,7 @@ public class ReservationDAO {
             ps.executeUpdate();
             System.out.println("Reservation Deleted");
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
     public void deleteByIdClient(int id) {
@@ -172,7 +167,7 @@ public class ReservationDAO {
             ps.executeUpdate();
             System.out.println("Reservation Deleted");
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
 }

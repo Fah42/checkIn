@@ -40,7 +40,7 @@ public class ClientDAO {
                 System.out.println("Insert Ok !");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return;
         }
     }
 
