@@ -67,12 +67,11 @@ public class Paiement {
 
     @Override
     public String toString() {
-        return "Paiement{" +
-                "dateP=" + dateP +
-                ", montant=" + montant +
-                ", methode='" + methode + '\'' +
+        return  id +
+                "date du paiement [" + dateP + "]" +
+                ", montant [" + montant + "]" +
+                ", methode [" + methode + ']' +
                 ", id_reservation=" + id_reservation +
-                ", id=" + id +
-                '}';
+                ']';
     }
 }

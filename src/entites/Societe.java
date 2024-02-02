@@ -56,11 +56,6 @@ public class Societe {
 
     @Override
     public String toString() {
-        return "Societe{" +
-                "id=" + id +
-                ", siret=" + siret +
-                ", name='" + name + '\'' +
-                ", adresse='" + adress + '\'' +
-                '}';
+        return  id + " siret [" + siret + "], nom [" + name  + "], adresse [" + adress + ']';
     }
 }

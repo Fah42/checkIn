@@ -1,10 +1,12 @@
 package entites;
 
+import dao.HotelDAO;
+
 public class Chambre {
     int id;
     int chamberNumber;
-    String IsSimple;
-    String isDouble;
+    int nbSimpleBed;
+    int nbDoubleBed;
     int chamberArea;
     int id_hotel;
     String bathroom;
@@ -14,13 +16,13 @@ public class Chambre {
     String bathtub;
     String soundproof;
     double pricePerNight;
-
-    public Chambre(int id, int id_hotel, int chamberNumber, String IsSimple, String isDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
+    HotelDAO hotelDAO = new HotelDAO();
+    public Chambre(int id, int id_hotel, int chamberNumber, int nbSimpleBed, int nbDoubleBed, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
         this.id = id;
         this.id_hotel = id_hotel;
         this.chamberNumber = chamberNumber;
-        this.IsSimple = IsSimple;
-        this.isDouble = isDouble;
+        this.nbSimpleBed = Chambre.this.nbSimpleBed;
+        this.nbDoubleBed = Chambre.this.nbDoubleBed;
         this.chamberArea = chamberArea;
         this.bathroom = bathroom;
         this.tv = tv;
@@ -30,10 +32,10 @@ public class Chambre {
         this.soundproof = soundproof;
         this.pricePerNight = pricePerNight;
     }
-    public Chambre(int chamberNumber, String IsSimple, String isDouble, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
+    public Chambre(int chamberNumber, int nbSimpleBed, int nbDoubleBed, int chamberArea, String bathroom, String tv, String balcony, String fridge, String bathtub, String soundproof, double pricePerNight) {
         this.chamberNumber = chamberNumber;
-        this.IsSimple = IsSimple;
-        this.isDouble = isDouble;
+        this.nbSimpleBed = Chambre.this.nbSimpleBed;
+        this.nbDoubleBed = Chambre.this.nbDoubleBed;
         this.chamberArea = chamberArea;
         this.bathroom = bathroom;
         this.tv = tv;
@@ -71,20 +73,20 @@ public class Chambre {
         this.chamberNumber = chamberNumber;
     }
 
-    public String getIsSimple() {
-        return IsSimple;
+    public int getnbSimpleBed() {
+        return nbSimpleBed;
     }
 
-    public void setIsSimple(String IsSimple) {
-        this.IsSimple = IsSimple;
+    public void setnbSimpleBed(int nbSimpleBed) {
+        this.nbSimpleBed = Chambre.this.nbSimpleBed;
     }
 
-    public String getisDouble() {
-        return isDouble;
+    public int getnbDoubleBed() {
+        return nbDoubleBed;
     }
 
-    public void setisDouble(String isDouble) {
-        this.isDouble = isDouble;
+    public void setnbDoubleBed(int nbDoubleBed) {
+        this.nbDoubleBed = Chambre.this.nbDoubleBed;
     }
 
     public int getChamberArea() {
@@ -153,19 +155,18 @@ public class Chambre {
 
     @Override
     public String toString() {
-        return "Chambre{" +
-                "id=" + id +
-                ", chamberNumber=" + chamberNumber +
-                ", IsSimple=" + IsSimple +
-                ", isDouble=" + isDouble +
-                ", chamberArea=" + chamberArea +
-                ", bathroom='" + bathroom + '\'' +
-                ", tv='" + tv + '\'' +
-                ", balcony='" + balcony + '\'' +
-                ", fridge='" + fridge + '\'' +
-                ", bathtub='" + bathtub + '\'' +
-                ", soundproof='" + soundproof + '\'' +
-                ", pricePerNight='" + pricePerNight + '\'' +
-                '}';
+        return id +
+                ", Chambre numero [" + chamberNumber + "]" +
+                ", Lit Simple [" + nbSimpleBed + "]" +
+                ", Lit Double [" + nbDoubleBed + "]" +
+                ", Superficie [" + chamberArea + "]" +
+                ", Salle de bain [" + bathroom + "]" +
+                ", TV [" + tv + "]" +
+                ", Balcon [" + balcony + ']' +
+                ", Frigo [" + fridge + ']' +
+                ", Baignoire [" + bathtub + ']' +
+                ", Insonorise [" + soundproof + ']' +
+                ", Prix par nuit [" + pricePerNight + ']' +
+                ", Hotel [" + hotelDAO.getById(id_hotel).getNom() + "]";
     }
 }

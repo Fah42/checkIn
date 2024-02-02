@@ -1,4 +1,6 @@
 package entites;
+import dao.SocieteDAO;
+
 import java.sql.Time;
 
 public class Hotel {
@@ -16,7 +18,7 @@ public class Hotel {
     int star;
     int id_societe;
     int id;
-
+    SocieteDAO societeDAO = new SocieteDAO();
     public Hotel(int id, String nom, String adress, String city, String desc, String parking, String wifi, Time checkIn, Time checkOut, String pool, String shuttle, String animals, int star, int id_societe) {
         this.id = id;
         this.nom = nom;
@@ -168,21 +170,19 @@ public class Hotel {
 
     @Override
     public String toString() {
-        return "Hotel{" +
-                ", id = " + id + '\'' +
-                "nom = '" + nom + '\'' +
-                ", adress = '" + adress + '\'' +
-                ", city = '" + city + '\'' +
-                ", desc = '" + desc + '\'' +
-                ", parking = '" + parking + '\'' +
-                ", wifi = '" + wifi + '\'' +
-                ", checkIn = " + checkIn +
-                ", checkOut = " + checkOut +
-                ", pool = '" + pool + '\'' +
-                ", shuttle = '" + shuttle + '\'' +
-                ", animals = '" + animals + '\'' +
-                ", star = " + star +
-                ", id_societe = " + id_societe +
-                '}';
+        return  id +
+                ", nom [" + nom + ']' +
+                ", adresse [" + adress + ']' +
+                ", city [" + city + ']' +
+                ", desc [" + desc + ']' +
+                ", parking [" + parking + ']' +
+                ", wifi [" + wifi + ']' +
+                ", checkIn [" + checkIn + "]" +
+                ", checkOut [" + checkOut + "]" +
+                ", pool [" + pool + ']' +
+                ", shuttle [" + shuttle + ']' +
+                ", animals [" + animals + ']' +
+                ", star [" + star + "]" +
+                ", societe [" + societeDAO.getById(id_societe).getName() + ']';
     }
 }

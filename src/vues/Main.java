@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 import java.time.format.DateTimeParseException;
 
+@SuppressWarnings("ALL")
 public class Main {
     static Scanner scanner = new Scanner(System.in);
 
@@ -84,15 +84,6 @@ public class Main {
         }
     }
 
-    public static boolean isDateFormatValid(String userInput, DateTimeFormatter timeFormatter) {
-        try {
-            LocalDate.parse(userInput, timeFormatter);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
-
     public static boolean isDateFormatValid(String userInput) {
         try {
             LocalDate.parse(userInput);
@@ -103,10 +94,10 @@ public class Main {
     }
 
     public static Double alreadyPaid(int id_reservation) {
-        ArrayList<Paiement> paiements = new ArrayList<>();
+        ArrayList<Paiement> paiements;
         PaiementDAO paiementDAO = new PaiementDAO();
         paiements = paiementDAO.getAll();
-        Double alreadyPaid = 0.0;
+        double alreadyPaid = 0.0;
 
         for (Paiement paiement : paiements) {
             if (paiement.getId_reservation() == id_reservation) {
@@ -117,12 +108,15 @@ public class Main {
         return alreadyPaid;
     }
 
-    public static boolean isStringValid(String stringToCheck) {
-        return stringToCheck.length() <= 50 && !stringToCheck.isEmpty();
+    public static boolean isStringValid(String stringToCheck, int size) {
+        return stringToCheck.length() <= size && !stringToCheck.isEmpty();
     }
 
+    public static boolean isStringOnlyNum(String stringToCheck, int size) {
+        return stringToCheck.matches("[0-9]+") && stringToCheck.length() == size;
+    }
     public static void displayCompany() {
-        ArrayList<Societe> societes = new ArrayList<>();
+        ArrayList<Societe> societes;
         societes = new SocieteDAO().getAll();
 
         for (Societe societe : societes) {
@@ -145,7 +139,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer le numero de siret de la societe : ");
                 siret = scanner.nextLine();
-                if (isStringValid(siret)) {
+                if (isStringOnlyNum(siret, 14)) {
                     societe.setSiret(siret);
                     isInputValid = true;
                 } else {
@@ -157,7 +151,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer le nom de la societe : ");
                 name = scanner.nextLine();
-                if (isStringValid(name)) {
+                if (isStringValid(name, 50)) {
                     societe.setName(name);
                     isInputValid = true;
                 } else {
@@ -169,7 +163,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer l'adresse de la societe : ");
                 adress = scanner.nextLine();
-                if (isStringValid(adress)) {
+                if (isStringValid(adress, 50)) {
                     societe.setAdress(adress);
                     isInputValid = true;
                 } else {
@@ -189,7 +183,7 @@ public class Main {
 
     public static void modifyCompany() {
         SocieteDAO societeDAO = new SocieteDAO();
-        Societe societe = new Societe();
+        Societe societe;
         String name;
         String adress;
         String siret;
@@ -220,7 +214,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer le numero de siret de la societe : ");
                 siret = scanner.nextLine();
-                if (isStringValid(siret)) {
+                if (isStringOnlyNum(siret, 14)) {
                     societe.setSiret(siret);
                     isInputValid = true;
                 } else {
@@ -232,7 +226,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer le nom de la societe : ");
                 name = scanner.nextLine();
-                if (isStringValid(name)) {
+                if (isStringValid(name, 50)) {
                     societe.setName(name);
                     isInputValid = true;
                 } else {
@@ -244,7 +238,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer l'adresse de la societe : ");
                 adress = scanner.nextLine();
-                if (isStringValid(adress)) {
+                if (isStringValid(adress, 50)) {
                     societe.setAdress(adress);
                     isInputValid = true;
                 } else {
@@ -266,7 +260,6 @@ public class Main {
         SocieteDAO societeDAO = new SocieteDAO();
         ChambreDAO chambreDAO = new ChambreDAO();
         HotelDAO hotelDAO = new HotelDAO();
-        Hotel hotel;
         Societe societe;
         String response;
         String areYouSure;
@@ -312,7 +305,7 @@ public class Main {
 
     public static void searchCompany() {
         SocieteDAO societeDAO = new SocieteDAO();
-        ArrayList<Societe> searchResults = new ArrayList<>();
+        ArrayList<Societe> searchResults;
         String search;
         String response;
 
@@ -339,7 +332,7 @@ public class Main {
     }
 
     public static void displayClient() {
-        ArrayList<Client> clients = new ArrayList<>();
+        ArrayList<Client> clients;
         clients = new ClientDAO().getAll();
 
         System.out.print("------ Affichage des Clients ------\n");
@@ -483,7 +476,7 @@ public class Main {
 
     public static void modifyClient() {
         ClientDAO clientDAO = new ClientDAO();
-        Client client = new Client();
+        Client client;
         boolean isInputValid = false;
         String firstname;
         String lastname;
@@ -675,7 +668,7 @@ public class Main {
 
     public static void searchClient() {
         ClientDAO clientDAO = new ClientDAO();
-        ArrayList<Client> searchResults = new ArrayList<>();
+        ArrayList<Client> searchResults;
         String search;
         String response;
 
@@ -702,7 +695,7 @@ public class Main {
     }
 
     public static void displayHotel() {
-        ArrayList<Hotel> hotels = new ArrayList<>();
+        ArrayList<Hotel> hotels;
         hotels = new HotelDAO().getAll();
 
         System.out.print("------ Affichage des Hotels ------\n");
@@ -756,7 +749,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer le nom de l'hotel : ");
                 name = scanner.nextLine();
-                if (isStringValid(name)) {
+                if (isStringValid(name, 50)) {
                     hotel.setNom(name);
                     isInputValid = true;
                 } else {
@@ -768,7 +761,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer l'adresse de l'hotel : ");
                 adress = scanner.nextLine();
-                if (isStringValid(adress)) {
+                if (isStringValid(adress, 50)) {
                     hotel.setAdress(adress);
                     isInputValid = true;
                 } else {
@@ -798,7 +791,7 @@ public class Main {
                 System.out.println("Veuillez entrer la ville ou se situe l'hotel : ");
                 city = scanner.nextLine();
 
-                if (isStringValid(city)) {
+                if (isStringValid(city, 50)) {
                     hotel.setCity(city);
                     isInputValid = true;
                 } else {
@@ -808,10 +801,10 @@ public class Main {
             isInputValid = false;
 
             while (!isInputValid) {
-                System.out.println("Veuillez entrer une description de l'hotel en 50 lettres maximum ");
+                System.out.println("Veuillez entrer une description de l'hotel en 200 lettres maximum ");
                 desc = scanner.nextLine();
 
-                if (isStringValid(desc)) {
+                if (isStringValid(desc, 200)) {
                     hotel.setAdress(desc);
                     isInputValid = true;
                 } else {
@@ -918,7 +911,7 @@ public class Main {
         int userChoice;
         HotelDAO hotelDAO = new HotelDAO();
         SocieteDAO societeDAO = new SocieteDAO();
-        Hotel hotel = new Hotel();
+        Hotel hotel;
         boolean isInputValid = false;
         String name;
         String adress;
@@ -977,7 +970,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer le nom de l'hotel : ");
                 name = scanner.nextLine();
-                if (isStringValid(name)) {
+                if (isStringValid(name, 50)) {
                     hotel.setNom(name);
                     isInputValid = true;
                 } else {
@@ -989,7 +982,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("Veuillez entrer l'adresse de l'hotel : ");
                 adress = scanner.nextLine();
-                if (isStringValid(adress)) {
+                if (isStringValid(adress, 50)) {
                     hotel.setAdress(adress);
                     isInputValid = true;
                 } else {
@@ -1019,7 +1012,7 @@ public class Main {
                 System.out.println("Veuillez entrer le ville du hotel : ");
                 city = scanner.nextLine();
 
-                if (isStringValid(city)) {
+                if (isStringValid(city, 50)) {
                     hotel.setCity(city);
                     isInputValid = true;
                 } else {
@@ -1029,10 +1022,10 @@ public class Main {
             isInputValid = false;
 
             while (!isInputValid) {
-                System.out.println("Veuillez entrer une description de l'hotel en 50 lettres maximum ");
+                System.out.println("Veuillez entrer une description de l'hotel en 200 lettres maximum ");
                 desc = scanner.nextLine();
 
-                if (isStringValid(desc)) {
+                if (isStringValid(desc, 200)) {
                     hotel.setDesc(desc);
                     isInputValid = true;
                 } else {
@@ -1182,7 +1175,7 @@ public class Main {
 
     public static void searchHotel() {
         HotelDAO hotelDAO = new HotelDAO();
-        ArrayList<Hotel> searchResults = new ArrayList<>();
+        ArrayList<Hotel> searchResults;
         String search;
         String response;
 
@@ -1209,7 +1202,7 @@ public class Main {
     }
 
     public static void displayRoom() {
-        ArrayList<Chambre> chambres = new ArrayList<>();
+        ArrayList<Chambre> chambres;
         chambres = new ChambreDAO().getAll();
 
         System.out.print("------ Affichage des Chambres ------\n");
@@ -1225,9 +1218,10 @@ public class Main {
         int id_hotel;
         int roomNumber;
         int roomArea;
+        int simpleBed;
+        int doubleBed;
         double pricePerNight;
         boolean isInputValid = false;
-        String simpleOrDouble;
         String bathroom;
         String bathtub;
         String tv;
@@ -1289,33 +1283,44 @@ public class Main {
                 }
             }
 
-            while (!isInputValid) {
-                System.out.println("Est-ce une chambre simple ? (repondre par oui ou non) : ");
-                simpleOrDouble = scanner.nextLine();
-                if (isStringValid(simpleOrDouble)) {
-                    while (!"oui".equalsIgnoreCase(simpleOrDouble) && !"non".equalsIgnoreCase(simpleOrDouble)) {
-                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
-                        System.out.println("Est-ce une chambre simple ? : ");
-                        simpleOrDouble = scanner.nextLine();
-                    }
-                    if ("oui".equalsIgnoreCase(simpleOrDouble)) {
-                        chambre.setIsSimple("oui");
-                        chambre.setisDouble("non");
+            while (true) {
+                System.out.println("Veuillez entrer le nombre de lit simple, uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    simpleBed = scanner.nextInt();
+                    if (simpleBed <= 0) {
+                        System.out.println("Veuillez entrer une valeur positive.");
                     } else {
-                        chambre.setIsSimple("non");
-                        chambre.setisDouble("oui");
+                        scanner.nextLine();
+                        chambre.setnbSimpleBed(simpleBed);
+                        break;
                     }
-                    isInputValid = true;
                 } else {
-                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
                 }
             }
-            isInputValid = false;
+
+            while (true) {
+                System.out.println("Veuillez entrer le nombre de lit double, uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    doubleBed = scanner.nextInt();
+                    if (doubleBed <= 0) {
+                        System.out.println("Veuillez entrer une valeur positive.");
+                    } else {
+                        scanner.nextLine();
+                        chambre.setnbDoubleBed(doubleBed);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
 
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'une salle de bain ? (repondre par oui ou non) : ");
                 bathroom = scanner.nextLine();
-                if (isStringValid(bathroom)) {
+                if (isStringValid(bathroom, 3)) {
                     while (!"oui".equalsIgnoreCase(bathroom) && !"non".equalsIgnoreCase(bathroom)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une salle de bain ? : ");
@@ -1347,7 +1352,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'une TV ? (repondre par oui ou non) : ");
                 tv = scanner.nextLine();
-                if (isStringValid(tv)) {
+                if (isStringValid(tv, 3)) {
                     while (!"oui".equalsIgnoreCase(tv) && !"non".equalsIgnoreCase(tv)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une TV ? : ");
@@ -1368,7 +1373,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'un balcon ? (repondre par oui ou non) : ");
                 balcony = scanner.nextLine();
-                if (isStringValid(balcony)) {
+                if (isStringValid(balcony, 3)) {
                     while (!"oui".equalsIgnoreCase(balcony) && !"non".equalsIgnoreCase(balcony)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'un balcon ? : ");
@@ -1389,7 +1394,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'un frigo ? (repondre par oui ou non) : ");
                 fridge = scanner.nextLine();
-                if (isStringValid(fridge)) {
+                if (isStringValid(fridge, 3)) {
                     while (!"oui".equalsIgnoreCase(fridge) && !"non".equalsIgnoreCase(fridge)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'un frigo ? : ");
@@ -1410,7 +1415,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'une insonorisation ? (repondre par oui ou non) : ");
                 soundproof = scanner.nextLine();
-                if (isStringValid(soundproof)) {
+                if (isStringValid(soundproof, 3)) {
                     while (!"oui".equalsIgnoreCase(soundproof) && !"non".equalsIgnoreCase(soundproof)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une insonorisation ? : ");
@@ -1458,13 +1463,14 @@ public class Main {
     public static void modifyRoom() {
         ChambreDAO chambreDAO = new ChambreDAO();
         HotelDAO hotelDAO = new HotelDAO();
-        Chambre chambre = new Chambre();
+        Chambre chambre;
         int id_hotel;
         int roomNumber;
         int roomArea;
+        int simpleBed;
+        int doubleBed;
         double pricePerNight;
         boolean isInputValid = false;
-        String simpleOrDouble;
         String bathroom;
         String bathtub;
         String tv;
@@ -1483,7 +1489,7 @@ public class Main {
                     userChoice = scanner.nextInt();
                     scanner.nextLine();
                     chambre = chambreDAO.getById(userChoice);
-                    if (chambreDAO != null) {
+                    if (chambre != null) {
                         break;
                     } else {
                         System.out.println("L'ID entré n'est pas valide. Veuillez réessayer.");
@@ -1544,31 +1550,44 @@ public class Main {
                 }
             }
 
-            while (!isInputValid) {
-                System.out.println("Est-ce une chambre simple ? (repondre par oui ou non) : ");
-                simpleOrDouble = scanner.nextLine();
-                if (isStringValid(simpleOrDouble)) {
-                    while (!"oui".equalsIgnoreCase(simpleOrDouble) || !"non".equalsIgnoreCase(simpleOrDouble)) {
-                        System.out.println("Veuillez repondre uniquement par Oui ou Non");
-                        System.out.println("Est-ce une chambre simple ? : ");
-                        simpleOrDouble = scanner.nextLine();
-                    }
-                    if ("oui".equalsIgnoreCase(simpleOrDouble)) {
-                        chambre.setIsSimple(simpleOrDouble);
+            while (true) {
+                System.out.println("Veuillez entrer le nombre de lit simple, uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    simpleBed = scanner.nextInt();
+                    if (simpleBed <= 0) {
+                        System.out.println("Veuillez entrer une valeur positive.");
                     } else {
-                        chambre.setisDouble(simpleOrDouble);
+                        scanner.nextLine();
+                        chambre.setnbSimpleBed(simpleBed);
+                        break;
                     }
-                    isInputValid = true;
                 } else {
-                    System.out.println("Nombre de characters trop eleve. Veuillez repondre par oui ou non.");
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
                 }
             }
-            isInputValid = false;
+
+            while (true) {
+                System.out.println("Veuillez entrer le nombre de lit double, uniquement en valeur numerique : ");
+                if (scanner.hasNextInt()) {
+                    doubleBed = scanner.nextInt();
+                    if (doubleBed <= 0) {
+                        System.out.println("Veuillez entrer une valeur positive.");
+                    } else {
+                        scanner.nextLine();
+                        chambre.setnbDoubleBed(doubleBed);
+                        break;
+                    }
+                } else {
+                    System.out.println("Valeur invalide.");
+                    scanner.next();
+                }
+            }
 
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'une salle de bain ? (repondre par oui ou non) : ");
                 bathroom = scanner.nextLine();
-                if (isStringValid(bathroom)) {
+                if (isStringValid(bathroom, 3)) {
                     while (!"oui".equalsIgnoreCase(bathroom) || !"non".equalsIgnoreCase(bathroom)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une salle de bain ? : ");
@@ -1600,7 +1619,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'une TV ? (repondre par oui ou non) : ");
                 tv = scanner.nextLine();
-                if (isStringValid(tv)) {
+                if (isStringValid(tv, 3)) {
                     while (!"oui".equalsIgnoreCase(tv) || !"non".equalsIgnoreCase(tv)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une TV ? : ");
@@ -1621,7 +1640,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'un balcon ? (repondre par oui ou non) : ");
                 balcony = scanner.nextLine();
-                if (isStringValid(balcony)) {
+                if (isStringValid(balcony, 3)) {
                     while (!"oui".equalsIgnoreCase(balcony) || !"non".equalsIgnoreCase(balcony)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'un balcon ? : ");
@@ -1642,7 +1661,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'un frigo ? (repondre par oui ou non) : ");
                 fridge = scanner.nextLine();
-                if (isStringValid(fridge)) {
+                if (isStringValid(fridge, 3)) {
                     while (!"oui".equalsIgnoreCase(fridge) || !"non".equalsIgnoreCase(fridge)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'un frigo ? : ");
@@ -1663,7 +1682,7 @@ public class Main {
             while (!isInputValid) {
                 System.out.println("La chambre dispose t'elle d'une insonorisation ? (repondre par oui ou non) : ");
                 soundproof = scanner.nextLine();
-                if (isStringValid(soundproof)) {
+                if (isStringValid(soundproof, 3)) {
                     while (!"oui".equalsIgnoreCase(soundproof) || !"non".equalsIgnoreCase(soundproof)) {
                         System.out.println("Veuillez repondre uniquement par Oui ou Non");
                         System.out.println("La chambre dispose t'elle d'une insonorisation ? : ");
@@ -1755,7 +1774,7 @@ public class Main {
 
     public static void searchRoom() {
         ChambreDAO chambreDAO = new ChambreDAO();
-        ArrayList<Chambre> searchResults = new ArrayList<>();
+        ArrayList<Chambre> searchResults;
         String search;
         String response;
 
@@ -1782,14 +1801,14 @@ public class Main {
     }
 
     public static void displayReservation() {
-        ArrayList<Reservation> reservations = new ArrayList<>();
+        ArrayList<Reservation> reservations;
         ClientDAO clientDAO = new ClientDAO();
         ChambreDAO chambreDAO = new ChambreDAO();
         HotelDAO hotelDAO = new HotelDAO();
-        Client client = new Client();
-        Chambre chambre = new Chambre();
-        Hotel hotel = new Hotel();
-        Double total;
+        Client client;
+        Chambre chambre;
+        Hotel hotel;
+        double total;
 
         reservations = new ReservationDAO().getAll();
         System.out.print("------ Affichage des Resevations ------\n");
@@ -2099,7 +2118,7 @@ public class Main {
 
     public static void searchReservation() {
         ReservationDAO reservationDAO = new ReservationDAO();
-        ArrayList<Reservation> searchResults = new ArrayList<>();
+        ArrayList<Reservation> searchResults;
         String search;
         String response;
 
@@ -2127,20 +2146,20 @@ public class Main {
 
     /**
      * Affiche les détails de tous les paiements enregistrés. Pour chaque paiement,
-     * récupère et affiche les informations associées a la reservation et du client correspondant.
+     * récupère et affiche les informations associées à la reservation et du client correspondant.
      * Utilise PaiementDAO pour obtenir tous les paiements, et CommandeDAO et ClientDAO pour
      * obtenir les détails supplémentaires nécessaires.
      **/
     public static void displayPaiement() {
-        ArrayList<Paiement> paiements = new ArrayList<>();
+        ArrayList<Paiement> paiements;
         ReservationDAO reservationDAO = new ReservationDAO();
         ChambreDAO chambreDAO = new ChambreDAO();
         ClientDAO clientDAO = new ClientDAO();
         HotelDAO hotelDAO = new HotelDAO();
-        Reservation reservation = new Reservation();
-        Chambre chambre = new Chambre();
-        Client client = new Client();
-        Hotel hotel = new Hotel();
+        Reservation reservation;
+        Chambre chambre;
+        Client client;
+        Hotel hotel;
         double total;
         double resteACharge;
 
@@ -2166,8 +2185,8 @@ public class Main {
     public static void addPaiement() {
         ReservationDAO reservationDAO = new ReservationDAO();
         ChambreDAO chambreDAO = new ChambreDAO();
-        Chambre chambre = new Chambre();
-        Reservation reservation = new Reservation();
+        Chambre chambre;
+        Reservation reservation;
         Paiement paiement = new Paiement();
         String response;
         String methode;
@@ -2252,7 +2271,7 @@ public class Main {
                 while (!isInputValid) {
                     System.out.println("Quelle est la methode de paiement ? (Carte, Espece, Cheque ?) : ");
                     methode = scanner.nextLine();
-                    if (isStringValid(methode)) {
+                    if (isStringValid(methode, 10)) {
                         while (!"carte".equalsIgnoreCase(methode) && !"espece".equalsIgnoreCase(methode) && !"cheque".equalsIgnoreCase(methode)) {
                             System.out.println("Veuillez repondre uniquement par Carte, Espece ou Cheque.");
                             methode = scanner.nextLine();
@@ -2380,8 +2399,8 @@ public class Main {
                 while (!isInputValid) {
                     System.out.println("Quelle est la methode de paiement ? (Carte, Espece, Cheque ?) : ");
                     methode = scanner.nextLine();
-                    if (isStringValid(methode)) {
-                        while (!"carte".equalsIgnoreCase(methode) || !"espece".equalsIgnoreCase(methode) || !"cheque".equalsIgnoreCase(methode)) {
+                    if (isStringValid(methode, 10)) {
+                        while (!"carte".equalsIgnoreCase(methode) && !"espece".equalsIgnoreCase(methode) && !"cheque".equalsIgnoreCase(methode)) {
                             System.out.println("Veuillez repondre uniquement par Carte, Espece ou Cheque.");
                             methode = scanner.nextLine();
                         }
@@ -2408,7 +2427,7 @@ public class Main {
      **/
     public static void deletePaiement() {
         PaiementDAO paiementDAO = new PaiementDAO();
-        Paiement paiement = new Paiement();
+        Paiement paiement;
         String response;
         String areYouSure;
         int userChoice;
@@ -2452,7 +2471,7 @@ public class Main {
 
     public static void searchPaiement() {
         PaiementDAO paiementDAO = new PaiementDAO();
-        ArrayList<Paiement> searchResults = new ArrayList<>();
+        ArrayList<Paiement> searchResults;
         String search;
         String response;
 

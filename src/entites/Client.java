@@ -164,17 +164,15 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", ville='" + ville + '\'' +
-                ", age=" + age +
-                ", prenom='" + prenom + '\'' +
-                ", adress='" + adress + '\'' +
-                ", email='" + email + '\'' +
-                ", sexe='" + sexe + '\'' +
-                ", noTel='" + noTel + '\'' +
-                ", country='" + country + '\'' +
-                '}';
+        return  id +
+                ", nom [" + nom + ']' +
+                ", ville [" + ville + ']' +
+                ", age [" + age + "]" +
+                ", prenom [" + prenom + ']' +
+                ", adress [" + adress + ']' +
+                ", email [" + email + ']' +
+                ", sexe [" + sexe + ']' +
+                ", noTel [" + noTel + ']' +
+                ", country [" + country + ']';
     }
 }
